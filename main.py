@@ -7,7 +7,8 @@ import os
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = "uploads"
-os.mkdir(app.config["UPLOAD_FOLDER"])
+if(not os.path.exists(app.config["UPLOAD_FOLDER"])):
+    os.mkdir(app.config["UPLOAD_FOLDER"])
 
 @app.route("/")
 def main():
@@ -30,6 +31,7 @@ def map_criteria_to_features(criteria_list, mapping):
     
     return unique_features
 
+ALLOWED_EXTENSIONS = {'ids'}
 @app.route("/submit", methods=["get", "post"])
 def submit():
     if request.method == "GET":
@@ -46,6 +48,18 @@ def submit():
 
         # Access uploaded files via request.files
         ids_file = request.files.get('idsFile')
+
+        def allowed_file(filename):
+            return '.' in filename and \
+                filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+        
+        # check if file was selected
+        if not ids_file or ids_file.filename == '':
+            return {'error': 'No file selected'}, 400
+        
+        # check if file has .ids extension
+        if not allowed_file(ids_file.filename):
+            return {'error': 'Only .ids files are allowed'}, 400
 
         # Check if the file was sent and has a filename
         if ids_file and ids_file.filename:
