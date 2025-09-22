@@ -4,7 +4,7 @@
 <style>
     body {
         font-family: sans-serif;
-        background-color: #f3f4f6;
+        background-color: #e7e7e7;
     }
     .container-shadow {
         box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
@@ -15,181 +15,91 @@
     .copy-button:hover {
         transform: scale(1.1);
     }
+    .rub-blue {
+        background-color: #17365c;
+    }
+    .rub-green {
+        background-color: #8dae10;
+    }
+    .rub-blue-text {
+        color: #17365c;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
     <!-- Hauptcontainer für die Anwendung -->
     <div class="bg-white rounded-2xl container-shadow p-8 w-full max-w-2xl">
+        <div class="flex justify-center mb-6">
+            <!-- BIM Deutschland Logo als Platzhalter -->
+            <img src="{{ url_for('static', filename="logo.svg") }}" alt="BIM Deutschland Logo" class="rounded-lg">
+        </div>
         <h1 class="text-3xl font-bold text-gray-800 text-center mb-2">Ausschreibungskriterien digitalisieren</h1>
-        <p class="text-gray-500 text-center mb-8">Erfassen und mappen Sie die Kriterien für Ihre digitale Ausschreibung.</p>
+        <p class="text-gray-500 text-center mb-8">Wählen Sie Kriterien aus den vorgegebenen Bereichen aus.</p>
 
         <!-- Formular zum Erfassen der Daten -->
         <div id="form-container">
             <div class="mb-6">
                 <label for="tender-name" class="block text-sm font-medium text-gray-700 mb-1">Name der Ausschreibung</label>
-                <input type="text" id="tender-name" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200" placeholder="z.B. BIM-Modellierung für Rathausanbau">
+                <input type="text" id="tender-name" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#17365c] transition duration-200" placeholder="z.B. BIM-Modellierung für Rathausanbau">
             </div>
 
             <div class="mb-6">
                 <label for="tender-description" class="block text-sm font-medium text-gray-700 mb-1">Beschreibung</label>
-                <textarea id="tender-description" rows="3" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200" placeholder="Kurze Beschreibung der Ausschreibung"></textarea>
+                <textarea id="tender-description" rows="3" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#17365c] transition duration-200" placeholder="Kurze Beschreibung der Ausschreibung"></textarea>
             </div>
 
-            <div id="criteria-list">
-                <!-- Dynamisch hinzugefügte Kriterienfelder -->
+            <!-- Checkliste für Kriterien -->
+            <div id="criteria-checklist" class="space-y-6">
+
+                <!-- Gruppe: Gestaltung -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Gestaltung</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg space-y-3">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="criterion-lod" data-group="Gestaltung" data-criterion="Level of Detail (LOD)" class="h-4 w-4 text-[#17365c] border-gray-300 rounded focus:ring-[#17365c]">
+                            <label for="criterion-lod" class="ml-3 text-sm font-medium text-gray-700">Level of Detail (LOD)</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="criterion-loin" data-group="Gestaltung" data-criterion="Level of Information Need (LOIN)" class="h-4 w-4 text-[#17365c] border-gray-300 rounded focus:ring-[#17365c]">
+                            <label for="criterion-loin" class="ml-3 text-sm font-medium text-gray-700">Level of Information Need (LOIN)</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="criterion-visual-qual" data-group="Gestaltung" data-criterion="Visuelle Qualität" class="h-4 w-4 text-[#17365c] border-gray-300 rounded focus:ring-[#17365c]">
+                            <label for="criterion-visual-qual" class="ml-3 text-sm font-medium text-gray-700">Visuelle Qualität</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gruppe: Nachhaltigkeit -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Nachhaltigkeit</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg space-y-3">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="criterion-energieeffizienz" data-group="Nachhaltigkeit" data-criterion="Energieeffizienz" class="h-4 w-4 text-[#17365c] border-gray-300 rounded focus:ring-[#17365c]">
+                            <label for="criterion-energieeffizienz" class="ml-3 text-sm font-medium text-gray-700">Energieeffizienz</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="criterion-cradle" data-group="Nachhaltigkeit" data-criterion="Cradle-to-Cradle-Prinzip" class="h-4 w-4 text-[#17365c] border-gray-300 rounded focus:ring-[#17365c]">
+                            <label for="criterion-cradle" class="ml-3 text-sm font-medium text-gray-700">Cradle-to-Cradle-Prinzip</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="criterion-lebenszyklus" data-group="Nachhaltigkeit" data-criterion="Lebenszyklusanalyse (LCA)" class="h-4 w-4 text-[#17365c] border-gray-300 rounded focus:ring-[#17365c]">
+                            <label for="criterion-lebenszyklus" class="ml-3 text-sm font-medium text-gray-700">Lebenszyklusanalyse (LCA)</label>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             
-            <button id="add-criterion-btn" class="w-full bg-blue-100 text-blue-700 font-medium py-2 rounded-lg hover:bg-blue-200 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                + Kriterium hinzufügen
-            </button>
-
-            <button id="generate-aia-btn" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition duration-200 mt-6 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            <button id="generate-aia-btn" class="w-full rub-blue text-white font-bold py-3 rounded-lg hover:bg-opacity-90 transition duration-200 mt-6 focus:outline-none focus:ring-2 focus:ring-[#17365c] focus:ring-offset-2">
                 AIA generieren
             </button>
         </div>
-
-        <!-- Container für das generierte Ergebnis -->
-        <div id="result-container" class="mt-8 hidden">
-            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center justify-between">
-                Generierte Auftraggeber-Informations-Anforderungen (AIA)
-                <button id="copy-btn" class="bg-gray-200 text-gray-600 px-3 py-1 rounded-lg text-sm flex items-center space-x-1 copy-button hover:bg-gray-300 transition duration-200">
-                    <span>Kopieren</span>
-                    <!-- SVG für das Kopier-Icon -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                    </svg>
-                </button>
-            </h2>
-            <pre id="aia-output" class="bg-gray-50 text-gray-800 p-4 rounded-lg border border-gray-200 whitespace-pre-wrap text-sm overflow-auto max-h-96"></pre>
-        </div>
-    </div>
-
-    <!-- Container für Benachrichtigungen (z.B. Kopierbestätigung) -->
-    <div id="notification-container" class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg text-sm hidden transition-all duration-300">
-        Text kopiert!
     </div>
 
     <script>
-        // DOM-Elemente abrufen
-        const criteriaList = document.getElementById('criteria-list');
-        const addCriterionBtn = document.getElementById('add-criterion-btn');
-        const generateAiaBtn = document.getElementById('generate-aia-btn');
-        const resultContainer = document.getElementById('result-container');
-        const aiaOutput = document.getElementById('aia-output');
-        const copyBtn = document.getElementById('copy-btn');
-        const notificationContainer = document.getElementById('notification-container');
-
-        // Vordefinierte Liste der Kriterien und deren standardisierte Zuordnungen
-        const criterionMappings = {
-            "Level of Detail (LOD)": "BIM-Standard 2.0",
-            "Level of Information Need (LOIN)": "VDI 2552 Blatt 11",
-            "Koordinatensystem": "EPSG:25832 (ETRS89 / UTM zone 32N)",
-            "Dateiformat": "IFC4",
-            "Qualitätssicherung": "BIM-Qualitätsplan",
-            "Datenstruktur (IFC-Klassifizierung)": "buildingSMART Data Dictionary"
-        };
-        const predefinedCriteria = Object.keys(criterionMappings);
-
-        /**
-         * Fügt ein neues Kriterien-Eingabefeld zur Liste hinzu.
-         */
-        function addCriterionField() {
-            const criterionDiv = document.createElement('div');
-            criterionDiv.classList.add('flex', 'flex-col', 'sm:flex-row', 'sm:space-x-4', 'mb-4', 'criterion-item');
-
-            // Select-Dropdown für vordefinierte Kriterien erstellen
-            const criterionSelect = document.createElement('select');
-            criterionSelect.dataset.type = 'criterion';
-            criterionSelect.classList.add('w-full', 'px-4', 'py-2', 'rounded-lg', 'border', 'border-gray-300', 'focus:outline-none', 'focus:ring-2', 'focus:ring-blue-500', 'transition', 'duration-200', 'mb-2', 'sm:mb-0');
-            
-            // Standardoption hinzufügen
-            const defaultOption = document.createElement('option');
-            defaultOption.textContent = 'Kriterium auswählen...';
-            defaultOption.value = '';
-            criterionSelect.appendChild(defaultOption);
-
-            // Vordefinierte Kriterien als Optionen hinzufügen
-            predefinedCriteria.forEach(criterion => {
-                const option = document.createElement('option');
-                option.value = criterion;
-                option.textContent = criterion;
-                criterionSelect.appendChild(option);
-            });
-
-            criterionDiv.appendChild(criterionSelect);
-
-            criteriaList.appendChild(criterionDiv);
-        }
-
-        // Standardmäßig ein Kriterium hinzufügen
-        addCriterionField();
-
-        // Event-Listener für den "Kriterium hinzufügen"-Button
-        addCriterionBtn.addEventListener('click', () => {
-            addCriterionField();
-        });
-
-        // Event-Listener für den "AIA generieren"-Button
-        generateAiaBtn.addEventListener('click', () => {
-            const tenderName = document.getElementById('tender-name').value;
-            const tenderDescription = document.getElementById('tender-description').value;
-            const criteria = [];
-            
-            // Eingabefelder für Kriterien durchlaufen
-            const criterionItems = document.querySelectorAll('.criterion-item');
-            criterionItems.forEach(item => {
-                const criterionSelect = item.querySelector('select[data-type="criterion"]');
-                const selectedCriterion = criterionSelect.value.trim();
-                
-                if (selectedCriterion !== '') {
-                    // Automatische Zuordnung des Merkmals
-                    const mappedFeature = criterionMappings[selectedCriterion] || 'Keine Zuordnung';
-                    criteria.push({
-                        criterion: selectedCriterion,
-                        mapping: mappedFeature
-                    });
-                }
-            });
-
-            // Text für die Ausgabe generieren
-            let outputText = `Auftraggeber-Informations-Anforderungen (AIA) - BIM-Kriterien\n\n`;
-            outputText += `Titel: ${tenderName || 'Nicht angegeben'}\n`;
-            outputText += `Beschreibung: ${tenderDescription || 'Nicht angegeben'}\n\n`;
-
-            outputText += `Anforderungen und Zuordnungen:\n`;
-            if (criteria.length > 0) {
-                criteria.forEach((c, index) => {
-                    outputText += `  ${index + 1}. Kriterium: ${c.criterion}\n`;
-                    outputText += `     Zuordnung: ${c.mapping}\n\n`;
-                });
-            } else {
-                outputText += `  Keine spezifischen Kriterien erfasst.\n`;
-            }
-
-            // Ergebnis anzeigen
-            aiaOutput.textContent = outputText;
-            resultContainer.classList.remove('hidden');
-        });
-
-        // Event-Listener für den Kopieren-Button
-        copyBtn.addEventListener('click', () => {
-            const textToCopy = aiaOutput.textContent;
-            
-            // Text in die Zwischenablage kopieren
-            const textArea = document.createElement("textarea");
-            textArea.value = textToCopy;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-
-            // Benachrichtigung anzeigen
-            notificationContainer.classList.remove('hidden');
-            setTimeout(() => {
-                notificationContainer.classList.add('hidden');
-            }, 2000);
-        });
+        
     </script>
 
 {% endblock %}
