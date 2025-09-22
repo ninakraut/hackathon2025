@@ -33,11 +33,12 @@
 {% block content %}
     <!-- Hauptcontainer für die Anwendung -->
     <div class="bg-white rounded-2xl container-shadow p-8 w-full max-w-2xl">
-        <div class="flex justify-center mb-6">
+        <div class="flex justify-center mb-4">
             <!-- BIM Deutschland Logo als Platzhalter -->
             <img src="{{ url_for('static', filename="logo_2bbim.png") }}" alt="2B-Bim Logo" class="logo rounded-lg mr-3">
             <img src="{{ url_for('static', filename="logo.svg") }}" alt="BIM Deutschland Logo" class="logo rounded-lg">
         </div>
+        <h3 class="text-xl font-bold text-gray-500 text-center mb-6">TO BE BIM, MEANS TO BE DIGITAL!</h3>
         <h1 class="text-3xl font-bold text-gray-800 text-center mb-2">Ausschreibungskriterien digitalisieren</h1>
         <p class="text-gray-500 text-center mb-8">Wählen Sie Kriterien aus den vorgegebenen Bereichen aus.</p>
 
@@ -60,17 +61,20 @@
                 <div>
                     <h3 class="text-lg font-semibold text-gray-800 mb-3">Gestaltung</h3>
                     <div class="bg-gray-50 p-4 rounded-lg space-y-3">
-                        <div class="flex items-center">
-                            <input type="checkbox" id="criterion-lod" data-group="Gestaltung" data-criterion="Level of Detail (LOD)" class="h-4 w-4 text-[#17365c] border-gray-300 rounded focus:ring-[#17365c]">
+                        <div class="criterion flex items-center" data-group="Gestaltung" data-criterion="Level of Detail (LOD)">
+                            <input type="checkbox" id="criterion-lod" class="h-4 w-4 text-[#17365c] border-gray-300 rounded focus:ring-[#17365c]">
                             <label for="criterion-lod" class="ml-3 text-sm font-medium text-gray-700">Level of Detail (LOD)</label>
+                            <input type="text" value="" class="border border-gray-300 ml-auto" />
                         </div>
-                        <div class="flex items-center">
-                            <input type="checkbox" id="criterion-loin" data-group="Gestaltung" data-criterion="Level of Information Need (LOIN)" class="h-4 w-4 text-[#17365c] border-gray-300 rounded focus:ring-[#17365c]">
+                        <div class="criterion flex items-center" data-group="Gestaltung" data-criterion="Level of Information Need (LOIN)">
+                            <input type="checkbox" id="criterion-loin" class="h-4 w-4 text-[#17365c] border-gray-300 rounded focus:ring-[#17365c]">
                             <label for="criterion-loin" class="ml-3 text-sm font-medium text-gray-700">Level of Information Need (LOIN)</label>
+                            <input type="text" value="" class="border border-gray-300 ml-auto" />
                         </div>
-                        <div class="flex items-center">
-                            <input type="checkbox" id="criterion-visual-qual" data-group="Gestaltung" data-criterion="Visuelle Qualität" class="h-4 w-4 text-[#17365c] border-gray-300 rounded focus:ring-[#17365c]">
+                        <div class="criterion flex items-center" data-group="Gestaltung" data-criterion="Visuelle Qualität">
+                            <input type="checkbox" id="criterion-visual-qual" class="h-4 w-4 text-[#17365c] border-gray-300 rounded focus:ring-[#17365c]">
                             <label for="criterion-visual-qual" class="ml-3 text-sm font-medium text-gray-700">Visuelle Qualität</label>
+                            <input type="text" value="" class="border border-gray-300 ml-auto" />
                         </div>
                     </div>
                 </div>
@@ -79,31 +83,32 @@
                 <div>
                     <h3 class="text-lg font-semibold text-gray-800 mb-3">Nachhaltigkeit</h3>
                     <div class="bg-gray-50 p-4 rounded-lg space-y-3">
-                        <div class="flex items-center">
-                            <input type="checkbox" id="criterion-energieeffizienz" data-group="Nachhaltigkeit" data-criterion="Energieeffizienz" class="h-4 w-4 text-[#17365c] border-gray-300 rounded focus:ring-[#17365c]">
+                        <div class="criterion flex items-center" data-group="Nachhaltigkeit" data-criterion="Energieeffizienz">
+                            <input type="checkbox" id="criterion-energieeffizienz" class="h-4 w-4 text-[#17365c] border-gray-300 rounded focus:ring-[#17365c]">
                             <label for="criterion-energieeffizienz" class="ml-3 text-sm font-medium text-gray-700">Energieeffizienz</label>
+                            <input type="text" value="" class="border border-gray-300 ml-auto" />
                         </div>
-                        <div class="flex items-center">
-                            <input type="checkbox" id="criterion-cradle" data-group="Nachhaltigkeit" data-criterion="Cradle-to-Cradle-Prinzip" class="h-4 w-4 text-[#17365c] border-gray-300 rounded focus:ring-[#17365c]">
+                        <div class="criterion flex items-center" data-group="Nachhaltigkeit" data-criterion="Cradle-to-Cradle-Prinzip">
+                            <input type="checkbox" id="criterion-cradle" class="h-4 w-4 text-[#17365c] border-gray-300 rounded focus:ring-[#17365c]">
                             <label for="criterion-cradle" class="ml-3 text-sm font-medium text-gray-700">Cradle-to-Cradle-Prinzip</label>
+                            <input type="text" value="" class="border border-gray-300 ml-auto" />
                         </div>
-                        <div class="flex items-center">
-                            <input type="checkbox" id="criterion-lebenszyklus" data-group="Nachhaltigkeit" data-criterion="Lebenszyklusanalyse (LCA)" class="h-4 w-4 text-[#17365c] border-gray-300 rounded focus:ring-[#17365c]">
+                        <div class="criterion flex items-center" data-group="Nachhaltigkeit" data-criterion="Lebenszyklusanalyse (LCA)">
+                            <input type="checkbox" id="criterion-lebenszyklus" class="h-4 w-4 text-[#17365c] border-gray-300 rounded focus:ring-[#17365c]">
                             <label for="criterion-lebenszyklus" class="ml-3 text-sm font-medium text-gray-700">Lebenszyklusanalyse (LCA)</label>
+                            <input type="text" value="" class="border border-gray-300 ml-auto" />
                         </div>
                     </div>
                 </div>
 
             </div>
             
-            <button id="generate-aia-btn" class="w-full rub-blue text-white font-bold py-3 rounded-lg hover:bg-opacity-90 transition duration-200 mt-6 focus:outline-none focus:ring-2 focus:ring-[#17365c] focus:ring-offset-2" onclick="window.location = '/submit'">
+            <button id="generate-aia-btn" class="w-full rub-blue text-white font-bold py-3 rounded-lg hover:bg-opacity-90 transition duration-200 mt-6 focus:outline-none focus:ring-2 focus:ring-[#17365c] focus:ring-offset-2">
                 AIA generieren
             </button>
         </div>
     </div>
 
-    <script>
-        
-    </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts/main.js') }}"></script>
 
 {% endblock %}
