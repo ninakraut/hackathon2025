@@ -15,27 +15,40 @@ class AiaEnhancer:
     def __init__(self, properties: List[Property]):
         pass
 
-    def add_property(self, object: BeautifulSoup, property: Property):
+    def add_property(self, object_: BeautifulSoup, spec_name: str, property: Property):
         u"""Add property to object"""
         pass
 
-    def check_single_property(self, object: BeautifulSoup, property: Property):
+    def check_single_property(self, object_: BeautifulSoup, property: Property):
         u"""Check if object has property"""
-        obj_properties = object.find_all('property')
-        prop_uri = property.uri
+        specifications = object_.find_all('specification')
+        modified_specifications = []
 
-        print(f"Checking {prop_uri}")
-        for property in obj_properties:
-            print(property["uri"])
-            if property["uri"] == prop_uri:
-                return True
-            return False
+        # Loop over all specification tags
+        for specification in specifications:
+            name = specification['name']
+            id = specification['identifier']
 
-    def check_properties(self, object: BeautifulSoup, properties: List[Property]):
+            obj_properties = object_.find_all('property')
+            prop_uri = property.uri
+
+            # loop over individual properties
+            found_property = False
+            for property in obj_properties:
+                if property["uri"] == prop_uri:
+                    found_property = True
+
+            # Track lacking specifications for adding properties and user feedback
+            if not found_property:
+                modified_specifications.append(name)
+
+        return modified_specifications
+
+    def check_properties(self, object_: BeautifulSoup, properties: List[Property]):
         u"""Check if all needed properties in object"""
         for property in properties:
-            if not self.check_single_property(object, property):
-                self.add_property(object, property)
+            if not self.check_single_property(object_, property):
+                self.add_property(object_, property)
 
 
 if __name__ == "__main__":
