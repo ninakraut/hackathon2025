@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datenübertragung</title>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .transfer-sequence {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .transfer-sequence .icon {
+            font-size: 80px;
+            color: #909090;
+            transition: color 0.5s ease-in-out;
+        }
+
+        .arrow-container {
+            position: relative;
+            width: 100px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .arrow-container .fa-arrow-right {
+            position: relative;
+            z-index: 3;
+            font-size: 30px;
+            color: #909090;
+        }
+        
+        .arrow-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background-color: #4CAF50;
+            width: 0;
+            z-index: 1;
+            border-radius: 15px;
+        }
+
+        .final-checkmark {
+            font-size: 80px;
+            color: #909090;
+            transition: color 1s ease-in-out;
+        }
+
+        .final-checkmark.completed {
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Daten werden übermittelt...</h1>
+        <div class="transfer-sequence">
+            <i class="fas fa-laptop icon"></i>
+            <div class="arrow-container">
+                <div id="arrow1-fill" class="arrow-fill"></div>
+                <i class="fas fa-arrow-right"></i>
+            </div>
+            <i class="fas fa-globe icon"></i>
+            <div class="arrow-container">
+                <div id="arrow2-fill" class="arrow-fill"></div>
+                <i class="fas fa-arrow-right"></i>
+            </div>
+            <i id="checkmark" class="fas fa-check-circle final-checkmark"></i>
+        </div>
+    </div>
+
+    <script>
+        const arrow1Fill = document.getElementById('arrow1-fill');
+        const arrow2Fill = document.getElementById('arrow2-fill');
+        const checkmark = document.getElementById('checkmark');
+
+        let progress1 = 0;
+        let progress2 = 0;
+
+        function animateArrow1() {
+            // Zufällige Erhöhung des Fortschritts und Verzögerung
+            const randomIncrement = Math.random() * 5;
+            const randomDelay = Math.random() * 50;
+
+            if (progress1 < 100) {
+                progress1 = Math.min(100, progress1 + randomIncrement);
+                arrow1Fill.style.width = progress1 + '%';
+                setTimeout(animateArrow1, randomDelay);
+            } else {
+                // Wenn fertig, starte die zweite Animation
+                animateArrow2();
+            }
+        }
+
+        function animateArrow2() {
+            // Zufällige Erhöhung des Fortschritts und Verzögerung
+            const randomIncrement = Math.random() * 5;
+            const randomDelay = Math.random() * 250;
+
+            if (progress2 < 100) {
+                progress2 = Math.min(100, progress2 + randomIncrement);
+                arrow2Fill.style.width = progress2 + '%';
+                setTimeout(animateArrow2, randomDelay);
+            } else {
+                // Wenn fertig, zeige den Haken und leite weiter
+                checkmark.classList.add('completed');
+                setTimeout(function() {
+                    window.location.href = "https://www.google.de"; 
+                }, 1000);
+            }
+        }
+
+        // Starten der ersten Animation
+        animateArrow1();
+    </script>
+
+</body>
+</html>

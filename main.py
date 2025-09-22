@@ -4,5 +4,9 @@ from flask.templating import render_template
 app = Flask(__name__)
 
 @app.route("/")
-def hello_world():
+def main():
     return render_template("index.html")
+
+@app.route("/submit")
+def animation():
+    return render_template("animation.html")

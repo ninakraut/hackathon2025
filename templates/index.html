@@ -24,6 +24,9 @@
     .rub-blue-text {
         color: #17365c;
     }
+    .logo{
+        height: 100px
+    }
 </style>
 {% endblock %}
 
@@ -32,7 +35,8 @@
     <div class="bg-white rounded-2xl container-shadow p-8 w-full max-w-2xl">
         <div class="flex justify-center mb-6">
             <!-- BIM Deutschland Logo als Platzhalter -->
-            <img src="{{ url_for('static', filename="logo.svg") }}" alt="BIM Deutschland Logo" class="rounded-lg">
+            <img src="{{ url_for('static', filename="logo_2bbim.png") }}" alt="2B-Bim Logo" class="logo rounded-lg mr-3">
+            <img src="{{ url_for('static', filename="logo.svg") }}" alt="BIM Deutschland Logo" class="logo rounded-lg">
         </div>
         <h1 class="text-3xl font-bold text-gray-800 text-center mb-2">Ausschreibungskriterien digitalisieren</h1>
         <p class="text-gray-500 text-center mb-8">Wählen Sie Kriterien aus den vorgegebenen Bereichen aus.</p>
@@ -92,7 +96,7 @@
 
             </div>
             
-            <button id="generate-aia-btn" class="w-full rub-blue text-white font-bold py-3 rounded-lg hover:bg-opacity-90 transition duration-200 mt-6 focus:outline-none focus:ring-2 focus:ring-[#17365c] focus:ring-offset-2">
+            <button id="generate-aia-btn" class="w-full rub-blue text-white font-bold py-3 rounded-lg hover:bg-opacity-90 transition duration-200 mt-6 focus:outline-none focus:ring-2 focus:ring-[#17365c] focus:ring-offset-2" onclick="window.location = '/submit'">
                 AIA generieren
             </button>
         </div>
