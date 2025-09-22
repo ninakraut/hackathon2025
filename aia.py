@@ -15,12 +15,15 @@ class AiaEnhancer:
     def __init__(self, properties: List[Property]):
         pass
 
-    def add_property(self, object_: BeautifulSoup, spec_name: str, property: Property):
+    def add_single_property(self, object_: BeautifulSoup, spec_name: str, spec_id: str, property: Property):
         u"""Add property to object"""
         pass
 
-    def check_single_property(self, object_: BeautifulSoup, property: Property):
-        u"""Check if object has property"""
+    def check_single_property(self, object_: BeautifulSoup, property: Property) -> list[tuple[str, str]]:
+        u"""Check if object has property
+
+        Returns list of (name, id) tuples
+        """
         specifications = object_.find_all('specification')
         modified_specifications = []
 
@@ -40,15 +43,17 @@ class AiaEnhancer:
 
             # Track lacking specifications for adding properties and user feedback
             if not found_property:
-                modified_specifications.append(name)
+                modified_specifications.append((name, id))
 
         return modified_specifications
 
     def check_properties(self, object_: BeautifulSoup, properties: List[Property]):
         u"""Check if all needed properties in object"""
         for property in properties:
-            if not self.check_single_property(object_, property):
-                self.add_property(object_, property)
+            modified_specifications = self.check_single_property(object_, property)
+            if not len(modified_specifications) == 0:
+                for spec_name, spec_id in modified_specifications:
+                    self.add_single_property(object_, spec_name, spec_id, property)
 
 
 if __name__ == "__main__":
