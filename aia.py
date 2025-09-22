@@ -15,11 +15,11 @@ class AiaEnhancer:
     def __init__(self, properties: List[Property]):
         pass
 
-    def add_single_property(self, object_: BeautifulSoup, spec_name: str, spec_id: str, property: Property):
+    def add_single_property(self, object_: BeautifulSoup, spec_name: str, spec_id: str, property_: Property):
         u"""Add property to object"""
         pass
 
-    def check_single_property(self, object_: BeautifulSoup, property: Property) -> list[tuple[str, str]]:
+    def check_single_property(self, object_: BeautifulSoup, property_: Property) -> list[tuple[str, str]]:
         u"""Check if object has property
 
         Returns list of (name, id) tuples
@@ -33,12 +33,12 @@ class AiaEnhancer:
             id = specification['identifier']
 
             obj_properties = object_.find_all('property')
-            prop_uri = property.uri
+            prop_uri = property_.uri
 
             # loop over individual properties
             found_property = False
-            for property in obj_properties:
-                if property["uri"] == prop_uri:
+            for property_ in obj_properties:
+                if property_["uri"] == prop_uri:
                     found_property = True
 
             # Track lacking specifications for adding properties and user feedback
@@ -49,11 +49,11 @@ class AiaEnhancer:
 
     def check_properties(self, object_: BeautifulSoup, properties: List[Property]):
         u"""Check if all needed properties in object"""
-        for property in properties:
-            modified_specifications = self.check_single_property(object_, property)
+        for property_ in properties:
+            modified_specifications = self.check_single_property(object_, property_)
             if not len(modified_specifications) == 0:
                 for spec_name, spec_id in modified_specifications:
-                    self.add_single_property(object_, spec_name, spec_id, property)
+                    self.add_single_property(object_, spec_name, spec_id, property_)
 
 
 if __name__ == "__main__":
