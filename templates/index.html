@@ -54,6 +54,11 @@
                 <textarea id="tender-description" rows="3" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#17365c] transition duration-200" placeholder="Kurze Beschreibung der Ausschreibung"></textarea>
             </div>
 
+            <div class="mb-6">
+                <label for="ids-upload" class="block text-sm font-medium text-gray-700 mb-1">IDS-Upload</label>
+                <input type="file" id="ids-upload" rows="3" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#17365c] transition duration-200"></input>
+            </div>
+
             <!-- Checkliste für Kriterien -->
             <div id="criteria-checklist" class="space-y-6">
                 {% for group, criteria in data.items() %}

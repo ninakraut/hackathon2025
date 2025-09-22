@@ -2,7 +2,7 @@ const generateBtn = document.getElementById('generate-aia-btn');
 const tenderNameInput = document.getElementById('tender-name');
 const tenderDescriptionTextarea = document.getElementById('tender-description');
 const criteriaCheckboxes = document.querySelectorAll('#criteria-checklist .criterion');
-const messageBox = document.getElementById('message-box');
+const idsUploadInput = document.getElementById('ids-upload'); // Referenz zum neuen Upload-Feld
 
 // Fiktiver API-Endpunkt
 const API_ENDPOINT = 'http://127.0.0.1:5001/submit';
@@ -14,6 +14,7 @@ generateBtn.addEventListener('click', async (event) => {
     // Daten aus den Textfeldern auslesen
     const tenderName = tenderNameInput.value;
     const tenderDescription = tenderDescriptionTextarea.value;
+    const idsFile = idsUploadInput.files[0]; // Das erste ausgewählte File-Objekt
 
     // Ausgewählte Checkboxen auslesen
     const selectedCriteria = Array.from(criteriaCheckboxes)
@@ -32,25 +33,26 @@ generateBtn.addEventListener('click', async (event) => {
             };
         });
 
-    // Payload-Objekt für die API erstellen
-    const payload = {
-        tenderName: tenderName,
-        tenderDescription: tenderDescription,
-        criteria: selectedCriteria
-    };
+    // FormData-Objekt für die API erstellen (unterstützt Dateien)
+    const formData = new FormData();
+    formData.append('tenderName', tenderName);
+    formData.append('tenderDescription', tenderDescription);
+    formData.append('criteria', JSON.stringify(selectedCriteria));
+
+    // Fügt die Datei hinzu, wenn eine ausgewählt wurde
+    if (idsFile) {
+        formData.append('idsFile', idsFile);
+    }
 
     // Konsolenausgabe der Payload (zur Überprüfung)
-    console.log('Payload, der gesendet wird:', payload);
+    console.log('Payload, der gesendet wird:', formData);
 
     // API-Anruf ausführen
     try {
         // Der Aufruf wird hier kommentiert, da es sich um einen fiktiven Endpunkt handelt.
         const response = await fetch(API_ENDPOINT, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload),
+            body: formData,
         });
         // Beispiel einer erfolgreichen Antwort-Handhabung
 
