@@ -59,6 +59,23 @@
                 <input type="file" id="ids-upload" rows="3" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#17365c] transition duration-200"></input>
             </div>
 
+            <div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-3">Gebäudetypen</h3>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <div class="criterion flex items-center">
+                        <label for="building-type-select" class="ml-3 text-sm font-medium text-gray-700">Gebäude auswählen:</label>
+                        <select id="building-type-select" class="ml-auto p-2 border border-gray-300 rounded-md shadow-sm">
+                            <option value="verwaltungsgebaeude">Verwaltungsgebäude</option>
+                            <option value="krankenhaus">Krankenhaus</option>
+                            <option value="pflegeheim">Pflegeheim</option>
+                            <option value="kita">Kita</option>
+                            <option value="lehre">Gebäude für Lehre</option>
+                            <option value="sonstiges">Sonstiges</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
             <!-- Checkliste für Kriterien -->
             <div id="criteria-checklist" class="space-y-6">
                 {% for group, criteria in data.items() %}
