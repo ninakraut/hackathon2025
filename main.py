@@ -6,6 +6,8 @@ import json
 import os
 import requests
 
+import aia
+
 # Flask-App initialisieren
 app = Flask(__name__)
 # Upload-Verzeichnis konfigurieren
@@ -23,20 +25,27 @@ def main():
     # Übergabe der Kriterien an das Template "index.html"
     return render_template("index.html", data=criteria)
 
-# Hilfsfunktion: Kriterien in Features abbilden
+# Hilfsfunktion: Kriterien in Merkmale abbilden
 def map_criteria_to_features(criteria_list, mapping):
-    all_features = []
+    all_features = set()
+
+    # load property information and transform into dataclass
+    with open("properties.json") as property_information:
+        property_data = json.load(property_information)
+    properties = [aia.Property(**prop) for prop in property_data]
 
     for criterion in criteria_list:
         group = criterion["group"]      # z. B. Kategorie der Kriterien
         name = criterion["criterion"]   # konkretes Kriterium
         # Prüfen, ob Mapping für diese Gruppe und Kriterium existiert
         if group in mapping and name in mapping[group]:
-            features = mapping[group][name]
-            all_features.extend(features)  # Features hinzufügen
+            feature_names = mapping[group][name]
+            for feature in feature_names:
+                match = next((p for p in properties if p.name == feature), None)
+                all_features.add(match)  # Features hinzufügen
     
     # Entfernen von Duplikaten und Sortieren der Merkmale
-    unique_features = sorted(list(set(all_features)))
+    unique_features = list(all_features)
     
     return unique_features
 
@@ -83,6 +92,7 @@ def submit():
                     # Datei lokal speichern
                     with open(app.config["UPLOAD_FOLDER"] + "/test.ids", "w") as fp:
                         fp.write(response.text)
+                        filepath = os.path.join(app.config["UPLOAD_FOLDER"], "test.ids")
                     # TODO: Debug-Version – Datei zusätzlich im "static"-Ordner speichern
                     with open(f"static/new.ids", "w") as fp:
                         fp.write(response.text)
@@ -104,5 +114,10 @@ def submit():
             ids_file.save(filepath)
             print(f"File saved to: {filepath}")
 
+        enhancer = aia.AiaEnhancer()
+        # Read original ids
+        with open(filepath, "r") as fp:
+            ids_file = fp.read()
+        enhancer.check_and_add_properties(ids_file, mapped_features)
         # Ergebnis zurückgeben (Liste der gemappten Features)
         return mapped_features
