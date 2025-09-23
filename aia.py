@@ -35,8 +35,10 @@ class AiaEnhancer:
         new_property.property["uri"] = property_.uri
         new_property.property["cardinality"] = property_.cardinality
         new_property.property["dataType"] = property_.datatype
-        new_property.select("property > propertySet > simpleValue").string = spec_name
-        new_property.select("baseName > simpleValue").string = property_.name
+        print(f"Spec_name: {spec_name}")
+        print(f"Property name: {property_.name}")
+        new_property.find("propertySet").find("simpleValue").string = spec_name
+        new_property.find("baseName").find("simpleValue").string = property_.name
         requirements.append(new_property)
         print(object_.prettify())
         #specification.find("requirements").clear() # clear to add modified version
@@ -80,7 +82,6 @@ class AiaEnhancer:
                     print(f"Modified specification: {spec_name}@{spec_id}")
                     self.add_single_property(object_, spec_name, spec_id, property_)
 
-        print()
         return True
 
 
