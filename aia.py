@@ -3,7 +3,7 @@ from typing import List
 
 from bs4 import BeautifulSoup
 
-@dataclass
+@dataclass(frozen=True)
 class Property:
     name: str
     uri: str
@@ -12,7 +12,7 @@ class Property:
 
 
 class AiaEnhancer:
-    def __init__(self, properties: List[Property]):
+    def __init__(self):
         self.property_dummy = '''<property
                     uri=\"\"
                     cardinality=\"\" dataType=\"\">

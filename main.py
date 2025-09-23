@@ -120,4 +120,4 @@ def submit():
         with open(f"static/new.ids", "w") as fp:
             fp.write(modified_ids)
 
-        return 200
+        return {"Response status": "Success"}, 200
