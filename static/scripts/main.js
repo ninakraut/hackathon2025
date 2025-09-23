@@ -3,6 +3,7 @@ const tenderNameInput = document.getElementById('tender-name');
 const tenderDescriptionTextarea = document.getElementById('tender-description');
 const criteriaCheckboxes = document.querySelectorAll('#criteria-checklist .criterion');
 const idsUploadInput = document.getElementById('ids-upload'); // Referenz zum neuen Upload-Feld
+const idsGUIDInput = document.getElementById('ids-guid');
 
 // Fiktiver API-Endpunkt
 const API_ENDPOINT = 'http://127.0.0.1:5001/submit';
@@ -15,6 +16,7 @@ generateBtn.addEventListener('click', async (event) => {
     const tenderName = tenderNameInput.value;
     const tenderDescription = tenderDescriptionTextarea.value;
     const idsFile = idsUploadInput.files[0]; // Das erste ausgewählte File-Objekt
+    const idsGUID = idsGUIDInput.value; // Das erste ausgewählte File-Objekt
 
     // Ausgewählte Checkboxen auslesen
     const selectedCriteria = Array.from(criteriaCheckboxes)
@@ -38,6 +40,7 @@ generateBtn.addEventListener('click', async (event) => {
     formData.append('tenderName', tenderName);
     formData.append('tenderDescription', tenderDescription);
     formData.append('criteria', JSON.stringify(selectedCriteria));
+    formData.append('idsGUID', idsGUID);
 
     // Fügt die Datei hinzu, wenn eine ausgewählt wurde
     if (idsFile) {

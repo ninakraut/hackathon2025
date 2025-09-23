@@ -4,6 +4,7 @@ from werkzeug.utils import secure_filename
 from flask.templating import render_template
 import json
 import os
+import requests
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = "uploads"
@@ -48,6 +49,7 @@ def submit():
 
         # Access uploaded files via request.files
         ids_file = request.files.get('idsFile')
+        ids_guid = data.get('idsGUID', "")
 
         def allowed_file(filename):
             return '.' in filename and \
@@ -55,23 +57,25 @@ def submit():
         
         # check if file was selected
         if not ids_file or ids_file.filename == '':
-            return {'error': 'No file selected'}, 400
-        
-        # check if file has .ids extension
-        if not allowed_file(ids_file.filename):
-            return {'error': 'Only .ids files are allowed'}, 400
+            if ids_guid:
+                response = requests.get(f"https://via.bund.de/bim/aia/api/v1/public/aiaProject/{ids_guid}/IDS")
+                if response.status_code == 200:
+                    with open(app.config["UPLOAD_FOLDER"] + "/test.ids", "w") as fp:
+                        fp.write(response.text)
+                else:
+                    print(f"Error getting IDS: {response.status_code}\n{response.text}")
+            else:
+                return {'error': 'No file selected'}, 400
+        else:
+            # check if file has .ids extension
+            if not allowed_file(ids_file.filename):
+                return {'error': 'Only .ids files are allowed'}, 400
 
-        # Check if the file was sent and has a filename
-        if ids_file and ids_file.filename:
             # Secure the filename to prevent security issues
             filename = secure_filename(ids_file.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             # Save the file to the configured upload folder
             ids_file.save(filepath)
             print(f"File saved to: {filepath}")
-        else:
-            # Handle case where no file was uploaded
-            filename = "No file uploaded"
-            print("No file was uploaded.")
 
         return mapped_features
