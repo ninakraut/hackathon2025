@@ -18,7 +18,7 @@ if(not os.path.exists(app.config["UPLOAD_FOLDER"])):
 @app.route("/")
 def main():
     # Kriterien aus JSON-Datei laden
-    criteria = json.load(open("criteria.json"))
+    criteria = json.load(open("criteria.json", encoding="utf8"))
 
     # Übergabe der Kriterien an das Template "index.html"
     return render_template("index.html", data=criteria)
