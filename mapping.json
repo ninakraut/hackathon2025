@@ -1,0 +1,7 @@
+{
+    "Nachhaltigkeit": {
+        "Trennbarkeit": ["Verbindungstyp", "Bauteiltyp", "Volumen"],
+        "Körpergebundener Kohlenstofffußabdruck": ["Material", "Volumen"],
+        "Rezyklierbarkeit": ["Material", "Volumen"]
+    }
+}
