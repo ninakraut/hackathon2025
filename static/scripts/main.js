@@ -6,7 +6,7 @@ const idsUploadInput = document.getElementById('ids-upload'); // Referenz zum ne
 const idsGUIDInput = document.getElementById('ids-guid');
 
 // Fiktiver API-Endpunkt
-const API_ENDPOINT = 'http://127.0.0.1:5001/submit';
+const API_ENDPOINT = '/submit';
 
 generateBtn.addEventListener('click', async (event) => {
     // Verhindert das Standardverhalten, um die Seite nicht neu zu laden
