@@ -62,6 +62,9 @@ def submit():
                 if response.status_code == 200:
                     with open(app.config["UPLOAD_FOLDER"] + "/test.ids", "w") as fp:
                         fp.write(response.text)
+                    # TODO: Delete in production
+                    with open(f"static/new.ids", "w") as fp:
+                        fp.write(response.text)
                 else:
                     print(f"Error getting IDS: {response.status_code}\n{response.text}")
             else:

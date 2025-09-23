@@ -62,6 +62,8 @@ generateBtn.addEventListener('click', async (event) => {
         if(response.ok) {
             const result = await response.json();
             console.log('Erfolgreiche Antwort:', result);
+
+            window.location = "/submit"
         } else {
             console.error('Fehler bei der API-Anfrage:', response.statusText);
         }
