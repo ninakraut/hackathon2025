@@ -13,11 +13,35 @@ class Property:
 
 class AiaEnhancer:
     def __init__(self, properties: List[Property]):
-        pass
+        self.property_dummy = '''<property
+                    uri=\"\"
+                    cardinality=\"\" dataType=\"\">
+                    <propertySet>
+                        <simpleValue></simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue></simpleValue>
+                    </baseName>
+                </property>'''
 
     def add_single_property(self, object_: BeautifulSoup, spec_name: str, spec_id: str, property_: Property):
         u"""Add property to object"""
-        pass
+        specification = object_.find(identifier=spec_id)
+        print(specification.prettify())
+
+        requirements = specification.find("requirements")
+        # create property from template and fill attributes
+        new_property = BeautifulSoup(self.property_dummy, "xml")
+        new_property.property["uri"] = property_.uri
+        new_property.property["cardinality"] = property_.cardinality
+        new_property.property["dataType"] = property_.datatype
+        new_property.select("property > propertySet > simpleValue").string = spec_name
+        new_property.select("baseName > simpleValue").string = property_.name
+        requirements.append(new_property)
+        print(object_.prettify())
+        #specification.find("requirements").clear() # clear to add modified version
+        #specification.append(requirements)
+
 
     def check_single_property(self, object_: BeautifulSoup, property_: Property) -> list[tuple[str, str]]:
         u"""Check if object has property
@@ -47,18 +71,22 @@ class AiaEnhancer:
 
         return modified_specifications
 
-    def check_properties(self, object_: BeautifulSoup, properties: List[Property]):
+    def check_and_add_properties(self, object_: BeautifulSoup, properties: List[Property]):
         u"""Check if all needed properties in object"""
         for property_ in properties:
             modified_specifications = self.check_single_property(object_, property_)
             if not len(modified_specifications) == 0:
                 for spec_name, spec_id in modified_specifications:
+                    print(f"Modified specification: {spec_name}@{spec_id}")
                     self.add_single_property(object_, spec_name, spec_id, property_)
+
+        print()
+        return True
 
 
 if __name__ == "__main__":
-    with open("/Users/felix/Arbeit/hackathon/ids-template-dach.ids", "r") as f:
-        _object = BeautifulSoup(f.read(), "xml")
+    with open("/Users/felix/Arbeit/hackathon/ids-template-dummy.ids", "r") as f:
+        object_ = BeautifulSoup(f.read(), "xml")
 
     prop_is_true = Property(
         "isTrue",
@@ -66,13 +94,15 @@ if __name__ == "__main__":
         "required",
         "IFCLABEL"
     )
-    prob_is_false = Property(
+    prop_is_false = Property(
         "isFalse",
         "none",
         "required",
         "IFCLABEL"
     )
-    enhancer = AiaEnhancer([prob_is_false, prop_is_true])
+    enhancer = AiaEnhancer([prop_is_false, prop_is_true])
 
-    assert enhancer.check_property(_object, prob_is_false) == False
-    assert enhancer.check_property(_object, prop_is_true) == True
+    assert len(enhancer.check_single_property(object_, prop_is_false)) > 0
+    assert len(enhancer.check_single_property(object_, prop_is_true)) == 0
+
+    assert enhancer.check_and_add_properties(object_, [prop_is_false, prop_is_true])
