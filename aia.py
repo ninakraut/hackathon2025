@@ -68,7 +68,7 @@ class AiaEnhancer:
         return modified_specifications
 
     def check_and_add_properties(self, object_: str, properties: List[Property]):
-        u"""Check if all needed properties in object"""
+        u"""Check if all needed properties in object and add missing properties."""
         object_ = BeautifulSoup(object_, "xml")
 
         for property_ in properties:
@@ -78,7 +78,7 @@ class AiaEnhancer:
                     print(f"Modified specification: {spec_name}@{spec_id}")
                     self.add_single_property(object_, spec_name, spec_id, property_)
 
-        return True
+        return str(object_)
 
 
 if __name__ == "__main__":

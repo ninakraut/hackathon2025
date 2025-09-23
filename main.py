@@ -93,9 +93,6 @@ def submit():
                     with open(app.config["UPLOAD_FOLDER"] + "/test.ids", "w") as fp:
                         fp.write(response.text)
                         filepath = os.path.join(app.config["UPLOAD_FOLDER"], "test.ids")
-                    # TODO: Debug-Version – Datei zusätzlich im "static"-Ordner speichern
-                    with open(f"static/new.ids", "w") as fp:
-                        fp.write(response.text)
                 else:
                     # Fehlerfall beim API-Request
                     print(f"Error getting IDS: {response.status_code}\n{response.text}")
@@ -118,6 +115,9 @@ def submit():
         # Read original ids
         with open(filepath, "r") as fp:
             ids_file = fp.read()
-        enhancer.check_and_add_properties(ids_file, mapped_features)
+        modified_ids = enhancer.check_and_add_properties(ids_file, mapped_features)
         # Ergebnis zurückgeben (Liste der gemappten Features)
-        return mapped_features
+        with open(f"static/new.ids", "w") as fp:
+            fp.write(modified_ids)
+
+        return 200
