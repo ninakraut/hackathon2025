@@ -466,3 +466,6 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/python,flask,pycharm,visualstudiocode,macos,linux,windows
+
+uploads/
+static/new.ids
