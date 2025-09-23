@@ -81,12 +81,12 @@
     <div class="container">
         <h1>Daten werden übermittelt...</h1>
         <div class="transfer-sequence">
-            <i class="fas fa-laptop icon"></i>
+            <i class="fas fa-laptop icon final-checkmark"></i>
             <div class="arrow-container">
                 <div id="arrow1-fill" class="arrow-fill"></div>
                 <i class="fas fa-arrow-right"></i>
             </div>
-            <i class="fas fa-globe icon"></i>
+            <i class="fas fa-globe icon final-checkmark"></i>
             <div class="arrow-container">
                 <div id="arrow2-fill" class="arrow-fill"></div>
                 <i class="fas fa-arrow-right"></i>
@@ -114,6 +114,7 @@
                 setTimeout(animateArrow1, randomDelay);
             } else {
                 // Wenn fertig, starte die zweite Animation
+                document.querySelector(".fa-globe").classList.add('completed');
                 animateArrow2();
             }
         }
@@ -137,6 +138,7 @@
         }
 
         // Starten der ersten Animation
+        document.querySelector(".fa-laptop").classList.add('completed');
         animateArrow1();
     </script>
 
