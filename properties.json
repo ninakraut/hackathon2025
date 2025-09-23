@@ -1,0 +1,26 @@
+[
+    {
+        "name": "Verbindungstyp",
+        "uri": "https://example.com/verbindungstyp",
+        "cardinality": "required",
+        "datatype": "IFCLABEL"
+    },
+    {
+        "name": "Bauteiltyp",
+        "uri": "https://example.com/bauteiltyp",
+        "cardinality": "required",
+        "datatype": "IFCLABEL"
+    },
+    {
+        "name": "Material",
+        "uri": "https://example.com/material",
+        "cardinality": "required",
+        "datatype": "IFCLABEL"
+    },
+    {
+        "name": "Volumen",
+        "uri": "https://example.com/volumen",
+        "cardinality": "required",
+        "datatype": "IFCLABEL"
+    }
+]
