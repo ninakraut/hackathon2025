@@ -1,33 +1,36 @@
-const generateBtn = document.getElementById('generate-aia-btn');
-const tenderNameInput = document.getElementById('tender-name');
-const tenderDescriptionTextarea = document.getElementById('tender-description');
-const criteriaCheckboxes = document.querySelectorAll('#criteria-checklist .criterion');
-const idsUploadInput = document.getElementById('ids-upload'); // Referenz zum neuen Upload-Feld
-const idsGUIDInput = document.getElementById('ids-guid');
+// Referenzen auf die Eingabeelemente im DOM
+const generateBtn = document.getElementById('generate-aia-btn');        // Button zum Generieren
+const tenderNameInput = document.getElementById('tender-name');         // Eingabefeld für Projektnamen
+const tenderDescriptionTextarea = document.getElementById('tender-description'); // Eingabefeld für Beschreibung
+const criteriaCheckboxes = document.querySelectorAll('#criteria-checklist .criterion'); // Alle Kriterien-Checkboxen
+const idsUploadInput = document.getElementById('ids-upload');           // Datei-Upload-Feld (.ids)
+const idsGUIDInput = document.getElementById('ids-guid');               // Eingabefeld für GUID (Alternative zum Upload)
 
-// Fiktiver API-Endpunkt
-const API_ENDPOINT = '/submit';
+const API_ENDPOINT = '/submit'; // API-Endpunkt in Flask
 
+// Klick-Event für den "Generate"-Button
 generateBtn.addEventListener('click', async (event) => {
-    // Verhindert das Standardverhalten, um die Seite nicht neu zu laden
+    // Verhindert das Standardverhalten des Buttons (kein Seitenreload)
     event.preventDefault();
 
-    // Daten aus den Textfeldern auslesen
+    // Eingaben aus Formularfeldern auslesen
     const tenderName = tenderNameInput.value;
     const tenderDescription = tenderDescriptionTextarea.value;
-    const idsFile = idsUploadInput.files[0]; // Das erste ausgewählte File-Objekt
-    const idsGUID = idsGUIDInput.value; // Das erste ausgewählte File-Objekt
+    const idsFile = idsUploadInput.files[0]; // Erste ausgewählte Datei (falls vorhanden)
+    const idsGUID = idsGUIDInput.value;      // GUID-Wert (falls vorhanden)
 
-    // Ausgewählte Checkboxen auslesen
+    // Ausgewählte Kriterien-Checkboxen ermitteln
     const selectedCriteria = Array.from(criteriaCheckboxes)
         .filter(criterion => {
-            let checkbox = criterion.querySelector("input[type=checkbox]")
-            return checkbox.checked
+            let checkbox = criterion.querySelector("input[type=checkbox]");
+            return checkbox.checked; // Nur die ausgewählten Checkboxen berücksichtigen
         })
         .map(criterion => {
-            let checkbox = criterion.querySelector("input[type=checkbox]")
-            let value = criterion.querySelector("input[type=text]").value
+            // Zu jeder Checkbox gehört auch ein Textfeld (z. B. Wert/Eingabe)
+            let checkbox = criterion.querySelector("input[type=checkbox]");
+            let value = criterion.querySelector("input[type=text]").value;
 
+            // Datenstruktur für Backend: Gruppe, Kriterium, Wert
             return {
                 group: criterion.dataset.group,
                 criterion: criterion.dataset.criterion,
@@ -35,39 +38,40 @@ generateBtn.addEventListener('click', async (event) => {
             };
         });
 
-    // FormData-Objekt für die API erstellen (unterstützt Dateien)
+    // FormData-Objekt vorbereiten (wird für Dateien benötigt)
     const formData = new FormData();
     formData.append('tenderName', tenderName);
     formData.append('tenderDescription', tenderDescription);
-    formData.append('criteria', JSON.stringify(selectedCriteria));
+    formData.append('criteria', JSON.stringify(selectedCriteria)); // Array als JSON übertragen
     formData.append('idsGUID', idsGUID);
 
-    // Fügt die Datei hinzu, wenn eine ausgewählt wurde
+    // Falls Datei hochgeladen → hinzufügen
     if (idsFile) {
         formData.append('idsFile', idsFile);
     }
 
-    // Konsolenausgabe der Payload (zur Überprüfung)
+    // Debug-Ausgabe: Zeigt Payload im Browser-Log
     console.log('Payload, der gesendet wird:', formData);
 
-    // API-Anruf ausführen
+    // API-Anfrage an Flask-Backend
     try {
-        // Der Aufruf wird hier kommentiert, da es sich um einen fiktiven Endpunkt handelt.
         const response = await fetch(API_ENDPOINT, {
             method: 'POST',
-            body: formData,
+            body: formData, // FormData enthält Felder + Datei
         });
-        // Beispiel einer erfolgreichen Antwort-Handhabung
 
+        // Wenn Anfrage erfolgreich war
         if(response.ok) {
             const result = await response.json();
             console.log('Erfolgreiche Antwort:', result);
 
-            window.location = "/submit"
+            // Weiterleitung nach erfolgreichem Submit
+            window.location = "/submit";
         } else {
             console.error('Fehler bei der API-Anfrage:', response.statusText);
         }
     } catch (error) {
+        // Falls Request komplett fehlschlägt (z. B. Netzwerkfehler)
         console.error('API-Anruf fehlgeschlagen:', error);
     }
 });
