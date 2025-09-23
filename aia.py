@@ -27,7 +27,6 @@ class AiaEnhancer:
     def add_single_property(self, object_: BeautifulSoup, spec_name: str, spec_id: str, property_: Property):
         u"""Add property to object"""
         specification = object_.find(identifier=spec_id)
-        print(specification.prettify())
 
         requirements = specification.find("requirements")
         # create property from template and fill attributes
@@ -35,14 +34,9 @@ class AiaEnhancer:
         new_property.property["uri"] = property_.uri
         new_property.property["cardinality"] = property_.cardinality
         new_property.property["dataType"] = property_.datatype
-        print(f"Spec_name: {spec_name}")
-        print(f"Property name: {property_.name}")
         new_property.find("propertySet").find("simpleValue").string = spec_name
         new_property.find("baseName").find("simpleValue").string = property_.name
         requirements.append(new_property)
-        print(object_.prettify())
-        #specification.find("requirements").clear() # clear to add modified version
-        #specification.append(requirements)
 
 
     def check_single_property(self, object_: BeautifulSoup, property_: Property) -> list[tuple[str, str]]:
