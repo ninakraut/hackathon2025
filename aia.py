@@ -67,9 +67,9 @@ class AiaEnhancer:
 
         return modified_specifications
 
-    def check_and_add_properties(self, object_: str, properties: List[Property]):
+    def check_and_add_properties(self, object_: str | BeautifulSoup, properties: List[Property]):
         u"""Check if all needed properties in object and add missing properties."""
-        object_ = BeautifulSoup(object_, "xml")
+        object_ = BeautifulSoup(object_, "xml") if isinstance(object_, str) else object_
 
         for property_ in properties:
             modified_specifications = self.check_single_property(object_, property_)
@@ -97,7 +97,7 @@ if __name__ == "__main__":
         "required",
         "IFCLABEL"
     )
-    enhancer = AiaEnhancer([prop_is_false, prop_is_true])
+    enhancer = AiaEnhancer()
 
     assert len(enhancer.check_single_property(object_, prop_is_false)) > 0
     assert len(enhancer.check_single_property(object_, prop_is_true)) == 0
