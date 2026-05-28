@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Digitalisierung erfolgreich | 2B-Bim</title>
+<meta name="description"
+    content="Ihre Ausschreibungskriterien wurden erfolgreich in die IDS-Datei integriert. Laden Sie Ihre fertige IDS-Datei jetzt herunter.">
+<!-- Font Awesome for modern icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<!-- Google Font Outfit for premium look -->
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        font-family: sans-serif;
+        background-color: #f3f4f6;
+    }
+
+    .rub-blue {
+        background-color: #17365c;
+    }
+
+    .rub-blue-text {
+        color: #17365c;
+    }
+
+    .rub-green {
+        background-color: #8dae10;
+    }
+
+    .rub-green-text {
+        color: #8dae10;
+    }
+
+    /* Modern fluid animations */
+    @keyframes scaleIn {
+        0% {
+            transform: scale(0.95);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    @keyframes successBounce {
+        0% {
+            transform: scale(0.4);
+            opacity: 0;
+        }
+
+        50% {
+            transform: scale(1.1);
+        }
+
+        70% {
+            transform: scale(0.95);
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    @keyframes float {
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-6px);
+        }
+    }
+
+    @keyframes pulseGlow {
+        0% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(141, 174, 16, 0.5);
+        }
+
+        70% {
+            transform: scale(1);
+            box-shadow: 0 0 0 20px rgba(141, 174, 16, 0);
+        }
+
+        100% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(141, 174, 16, 0);
+        }
+    }
+
+    .animate-card {
+        animation: scaleIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .animate-checkmark {
+        animation: successBounce 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards;
+        opacity: 0;
+    }
+
+    .animate-card-float {
+        animation: float 4s ease-in-out infinite;
+    }
+
+    .animate-success-pulse {
+        animation: pulseGlow 2.5s infinite;
+    }
+
+    /* Glassmorphism details */
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+    }
+
+    /* Hover animation effects */
+    .btn-hover-effect {
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .btn-hover-effect:hover {
+        transform: translateY(-2px) scale(1.02);
+    }
+
+    .btn-hover-effect:hover .download-icon {
+        animation: float 1s ease-in-out infinite;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Main Premium Success Card -->
+<div
+    class="glass-panel rounded-3xl shadow-2xl p-10 max-w-xl w-full text-center border border-gray-100 relative overflow-hidden animate-card">
+
+    <!-- Premium top gradient highlight -->
+    <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#17365c] via-[#8dae10] to-[#17365c]"></div>
+
+    <!-- Success Icon Section -->
+    <div class="flex justify-center mb-8 mt-4">
+        <div class="relative">
+            <!-- Glowing pulsing ring -->
+            <div class="absolute inset-0 rounded-full w-24 h-24 bg-opacity-20 rub-green animate-success-pulse"></div>
+            <!-- Core checkmark background -->
+            <div
+                class="relative w-24 h-24 rounded-full rub-green flex items-center justify-center shadow-lg animate-checkmark z-10">
+                <i class="fas fa-check text-white text-4xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Message Header -->
+    <h1 class="text-3xl font-bold text-gray-800 mb-3 tracking-tight">Digitalisierung erfolgreich!</h1>
+    <p class="text-gray-500 font-medium max-w-md mx-auto mb-8 leading-relaxed">
+        Ihre ausgewählten Ausschreibungskriterien wurden präzise verarbeitet und in die IDS-Spezifikation integriert.
+    </p>
+
+    <!-- Dynamic File Information Card -->
+    <div class="bg-gray-50 rounded-2xl p-5 border border-gray-200/60 mb-8 text-left flex items-center space-x-4">
+        <div
+            class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-[#17365c] text-xl shadow-inner">
+            <i class="fas fa-file-code"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="text-sm font-semibold text-gray-800">new.ids</h3>
+            <p class="text-xs text-gray-400">Information Delivery Specification (IDS)</p>
+        </div>
+        <span
+            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
+            <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-emerald-500"></span>
+            Bereit
+        </span>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+
+        <!-- Download Button -->
+        <a href="/static/new.ids" download="digitized_requirements.ids" id="download-ids-btn"
+            class="w-full sm:w-auto px-8 py-3.5 rub-blue hover:bg-opacity-95 text-white font-bold rounded-xl shadow-lg shadow-blue-900/10 flex items-center justify-center gap-3 btn-hover-effect cursor-pointer">
+            <i class="fas fa-arrow-down download-icon"></i>
+            <span>IDS herunterladen</span>
+        </a>
+
+        <!-- Back Home Button -->
+        <a href="/" id="back-home-btn"
+            class="w-full sm:w-auto px-8 py-3.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl border border-gray-200 flex items-center justify-center gap-3 btn-hover-effect cursor-pointer">
+            <i class="fas fa-home"></i>
+            <span>Zur Startseite</span>
+        </a>
+
+    </div>
+</div>
+{% endblock %}
