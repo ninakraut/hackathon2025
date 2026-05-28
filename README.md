@@ -1,6 +1,6 @@
 # 2B-BIM Hackathon
 
-Dieses Projekt stellt eine kleine Webanwendung bereit, um **AIA-Daten (Auftraggeber-Informationsanforderungen)** auf ausgewählte Kriterien prüfen und die nötigen Merkmale gegebenenfalls zu ergänzen.  
+Dieses Projekt stellt eine Webanwendung bereit, um **AIA-Daten (Auftraggeber-Informationsanforderungen)** auf ausgewählte Nachhaltigkeitskriterien prüfen und die nötigen Merkmale gegebenenfalls zu ergänzen.  
 Die Anwendung kombiniert ein Flask-Backend mit einem einfachen Frontend (HTML/JS) und bindet das BIM-Portal per API an.
 Autoren/Teammitglieder sind Daniel Gerdes ([NietroMiner00](https://github.com/NietroMiner00)), Rosa Alani ([Azorios](https://github.com/Azorios)), Nina Krautgartner ([ninakraut](https://github.com/ninakraut)), Felix Rosenthal ([FeR0se](https://github.com/FeR0se)), Johannes Reinders
 
@@ -9,11 +9,9 @@ Autoren/Teammitglieder sind Daniel Gerdes ([NietroMiner00](https://github.com/Ni
 ## ⚙️ Funktionen
 
 - **Kriterien-Auswahl**: Nutzer können Kriterien über eine Checkliste auswählen und optional Werte eingeben.  
-- **Datei-Upload**: `.ids`-Dateien können direkt hochgeladen werden.  
-- **Alternativ**: Statt einer Datei kann eine **GUID** angegeben werden, die eine `.ids`-Datei über das BIM-Deutschland-API (`via.bund.de`) lädt.  
-- **Mapping**: Kriterien werden über eine JSON-Mappingdatei in Merkmale übersetzt.  
-- **Speicherung**: Dateien werden lokal im Ordner `uploads/` abgelegt.  
-- **Antwort**: Das Backend gibt die gemappten Merkmale als JSON zurück.  
+- **Datei-Upload**: `.ids  `-Dateien können direkt hochgeladen oder alternativ mittels **GUID** über das BIM-Deutschland-API (`via.bund.de`) geladen werden.
+- **Mapping**: Nachhaltigkeitskriterien werden über eine JSON-Mappingdatei in Merkmale übersetzt.
+- **Antwort**: Das Backend exportiert die geprüfte und ggf. erweiterte `.ids`-Datei zum Download.   
 
 ---
 
