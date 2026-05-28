@@ -24,23 +24,19 @@
     .rub-blue-text {
         color: #17365c;
     }
-    .logo{
-        height: 100px
-    }
 </style>
 {% endblock %}
 
 {% block content %}
     <!-- Hauptcontainer für die Anwendung -->
     <div class="bg-white rounded-2xl container-shadow p-8 w-full max-w-2xl">
-        <div class="flex justify-center mb-4">
+        <div class="flex justify-center mb-8 items-center">
             <!-- BIM Deutschland Logo als Platzhalter -->
-            <img src="{{ url_for('static', filename="logo_2bbim.png") }}" alt="2B-Bim Logo" class="logo rounded-lg mr-3">
-            <img src="{{ url_for('static', filename="logo.svg") }}" alt="BIM Deutschland Logo" class="logo rounded-lg">
+            <img src="{{ url_for('static', filename="Logo_IIB.png") }}" alt="Informatik im Bauwesen Logo" class="max-h-14 mr-5">
+            <img src="{{ url_for('static', filename="Logo_RUB.jpg") }}" alt="Ruhr-Uni Bochum Logo" class="max-h-12">
         </div>
-        <h3 class="text-xl font-bold text-gray-500 text-center mb-6">TO BE BIM, MEANS TO BE DIGITAL!</h3>
-        <h1 class="text-3xl font-bold text-gray-800 text-center mb-2">Ausschreibungskriterien digitalisieren</h1>
-        <p class="text-gray-500 text-center mb-8">Wählen Sie Kriterien aus den vorgegebenen Bereichen aus.</p>
+        <h1 class="text-3xl font-bold text-gray-800 text-center mb-2">Ausschreibungskriterien validieren</h1>
+        <p class="text-gray-500 text-center mb-8">Wählen Sie Kriterien aus den vorgegebenen Bereichen aus, um Ihre AIA zu validieren und bei Bedarf zu ergänzen.</p>
 
         <!-- Formular zum Erfassen der Daten -->
         <div id="form-container">
