@@ -56,8 +56,8 @@ ALLOWED_EXTENSIONS = {'ids'}
 @app.route("/submit", methods=["get", "post"])
 def submit():
     if request.method == "GET":
-        # Bei GET: Template mit Animation laden
-        return render_template("animation.html")
+        # Bei GET: Template mit Ergebnis laden
+        return render_template("result.html")
     else:
         # Bei POST: Formular-Daten verarbeiten
         data = request.form
