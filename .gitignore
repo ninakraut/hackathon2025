@@ -468,7 +468,9 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/python,flask,pycharm,visualstudiocode,macos,linux,windows
 
 uploads/
-static/new.ids# Created by https://www.toptal.com/developers/gitignore/api/intellij
+static/new.ids
+
+# Created by https://www.toptal.com/developers/gitignore/api/intellij
 # Edit at https://www.toptal.com/developers/gitignore?templates=intellij
 
 ### Intellij ###
