@@ -11,14 +11,6 @@
         box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
     }
 
-    .copy-button {
-        transition: all 0.2s ease-in-out;
-    }
-
-    .copy-button:hover {
-        transform: scale(1.1);
-    }
-
     .rub-blue {
         background-color: #17365c;
     }
@@ -30,12 +22,18 @@
     .rub-blue-text {
         color: #17365c;
     }
+
+    [v-cloak] {
+        display: none !important;
+    }
 </style>
+<!-- Vue.js 3 from CDN -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 {% endblock %}
 
 {% block content %}
-<!-- Hauptcontainer für die Anwendung -->
-<div class="bg-white rounded-2xl container-shadow p-8 w-full max-w-2xl">
+<!-- Hauptcontainer für die Anwendung mit Vue-App -->
+<div id="app" class="bg-white rounded-2xl container-shadow p-8 w-full max-w-5xl transition-all duration-300" v-cloak>
     <div class="flex justify-center mb-8 items-center">
         <!-- BIM Deutschland Logo als Platzhalter -->
         <img src="{{ url_for('static', filename=" Logo_IIB.png") }}" alt="Informatik im Bauwesen Logo"
@@ -46,39 +44,77 @@
     <p class="text-gray-500 text-center mb-8">Wählen Sie Kriterien aus den vorgegebenen Bereichen aus, um Ihre AIA zu
         validieren und bei Bedarf zu ergänzen.</p>
 
-    <!-- Formular zum Erfassen der Daten -->
-    <div id="form-container">
-        <div class="mb-6">
-            <label for="tender-name" class="block text-sm font-medium text-gray-700 mb-1">Name der Ausschreibung</label>
-            <input type="text" id="tender-name"
-                class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#17365c] transition duration-200"
-                placeholder="z.B. BIM-Modellierung für Rathausanbau">
-        </div>
+    <!-- Zweispaltiges Layout (Horizontal & Compact) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-        <div class="mb-6">
-            <label for="tender-description" class="block text-sm font-medium text-gray-700 mb-1">Beschreibung</label>
-            <textarea id="tender-description" rows="3"
-                class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#17365c] transition duration-200"
-                placeholder="Kurze Beschreibung der Ausschreibung"></textarea>
-        </div>
+        <!-- Linke Spalte: IDS Source & Kontext -->
+        <div class="space-y-6">
+            <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">AIA/IDS Quelle</h3>
 
-        <div class="mb-6">
-            <label for="ids-upload" class="block text-sm font-medium text-gray-700 mb-1">IDS-Upload</label>
-            <input type="file" id="ids-upload" rows="3"
-                class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#17365c] transition duration-200 mb-1"></input>
-            <label for="ids-guid" class="block text-sm font-medium text-gray-700">IDS-GUID</label><span
-                class="text-gray-500 text-xs mb-1">(Falls keine Datei zum uploaden!)</span>
-            <input type="text" id="ids-guid" rows="3"
-                class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#17365c] transition duration-200"></input>
-        </div>
+                <!-- Tab-Navigation -->
+                <div class="flex border-b border-gray-200 mb-4">
+                    <button type="button"
+                        class="flex-1 pb-2 text-center font-semibold text-xs border-b-2 transition duration-200"
+                        :class="activeTab === 'upload' ? 'border-[#17365c] text-[#17365c]' : 'border-transparent text-gray-400 hover:text-gray-600'"
+                        @click="activeTab = 'upload'">
+                        Datei hochladen
+                    </button>
+                    <button type="button"
+                        class="flex-1 pb-2 text-center font-semibold text-xs border-b-2 transition duration-200"
+                        :class="activeTab === 'guid' ? 'border-[#17365c] text-[#17365c]' : 'border-transparent text-gray-400 hover:text-gray-600'"
+                        @click="activeTab = 'guid'">
+                        GUID eingeben
+                    </button>
+                </div>
 
-        <div>
-            <h3 class="text-lg font-semibold text-gray-800 mb-3">Gebäudetypen</h3>
-            <div class="bg-gray-50 p-4 rounded-lg">
-                <div class="criterion flex items-center">
-                    <label for="building-type-select" class="ml-3 text-sm font-medium text-gray-700">Gebäude
-                        auswählen:</label>
-                    <select id="building-type-select" class="ml-auto p-2 border border-gray-300 rounded-md shadow-sm">
+                <!-- Tab: Datei hochladen -->
+                <div v-show="activeTab === 'upload'" class="space-y-2">
+                    <label class="block text-xs font-semibold text-gray-600">IDS Datei auswählen</label>
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-5 text-center hover:border-[#17365c] transition cursor-pointer relative"
+                        :class="{'border-[#17365c] bg-blue-50/10': isDragging}" @dragover.prevent="isDragging = true"
+                        @dragleave.prevent="isDragging = false" @drop.prevent="handleFileDrop">
+
+                        <input type="file" id="ids-upload" ref="fileInput"
+                            class="absolute inset-0 opacity-0 cursor-pointer" @change="handleFileSelection"
+                            accept=".ids">
+
+                        <div v-if="!idsFile" class="space-y-1">
+                            <div class="text-[#17365c] font-semibold text-sm">Datei auswählen</div>
+                            <div class="text-xs text-gray-400">oder hierher ziehen (.ids)</div>
+                        </div>
+
+                        <div v-else
+                            class="flex items-center justify-between text-left bg-white p-2 rounded border border-gray-200">
+                            <div class="truncate flex-1 pr-2">
+                                <div class="text-xs font-bold text-gray-800 truncate">[[ idsFile.name ]]</div>
+                                <div class="text-[10px] text-gray-400">[[ (idsFile.size / 1024).toFixed(1) ]] KB</div>
+                            </div>
+                            <button type="button" @click.stop="clearFile"
+                                class="text-red-500 hover:text-red-700 text-xs font-semibold p-1">
+                                Entfernen
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: GUID eingeben -->
+                <div v-show="activeTab === 'guid'" class="space-y-2">
+                    <label for="ids-guid" class="block text-xs font-semibold text-gray-600">IDS-GUID</label>
+                    <input type="text" id="ids-guid" v-model="idsGUID"
+                        class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#17365c] transition text-sm"
+                        placeholder="z.B. d290f1ee-6c54-4b01-90e6-d701748f0851">
+                    <p class="text-gray-400 text-[10px]">GUID der IDS aus dem BIM-Deutschland-Portal</p>
+                </div>
+            </div>
+
+            <!-- Gebäudetyp -->
+            <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                <label for="building-type-select"
+                    class="block text-sm font-semibold text-gray-800 mb-2">Gebäudetyp</label>
+                <div class="relative">
+                    <select id="building-type-select" v-model="buildingType"
+                        class="w-full px-3 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#17365c] transition text-sm appearance-none bg-white">
                         <option value="verwaltungsgebaeude">Verwaltungsgebäude</option>
                         <option value="krankenhaus">Krankenhaus</option>
                         <option value="pflegeheim">Pflegeheim</option>
@@ -86,33 +122,69 @@
                         <option value="lehre">Gebäude für Lehre</option>
                         <option value="sonstiges">Sonstiges</option>
                     </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                        </svg>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Checkliste für Kriterien -->
-        <div id="criteria-checklist" class="space-y-6">
-            {% for group, criteria in data.items() %}
+        <!-- Rechte Spalte: Kriterien Checkliste -->
+        <div class="bg-gray-50 p-5 rounded-xl border border-gray-200 flex flex-col justify-between">
             <div>
-                <h3 class="text-lg font-semibold text-gray-800 mb-3">{{ group }}</h3>
-                <div class="bg-gray-50 p-4 rounded-lg space-y-3">
-                    {% for criterion in criteria %}
-                    <div class="criterion flex items-center" data-group="{{ group }}" data-criterion="{{ criterion }}">
-                        <input type="checkbox" id="criterion-{{ loop.index }}"
-                            class="h-4 w-4 text-[#17365c] border-gray-300 rounded focus:ring-[#17365c]">
-                        <label for="criterion-{{ loop.index }}" class="ml-3 text-sm font-medium text-gray-700">{{
-                            criterion }}</label>
-                        <input type="text" value="" class="border border-gray-300 ml-auto hidden" />
+                <h3 class="text-sm font-semibold uppercase tracking-wider text-gray-500 mb-4">Ausschreibungskriterien
+                </h3>
+                <div id="criteria-checklist" class="space-y-4 overflow-y-auto max-h-[300px] pr-1">
+                    {% for group, criteria in data.items() %}
+                    <div>
+                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">{{ group }}</h4>
+                        <div class="space-y-2">
+                            {% for criterion in criteria %}
+                            <div class="criterion flex items-center p-3 rounded-lg border transition duration-150 cursor-pointer shadow-sm"
+                                :class="isCriterionSelected('{{ group }}', '{{ criterion }}') ? 'border-[#17365c] bg-blue-50/15' : 'border-gray-200 hover:border-gray-300 bg-white'"
+                                @click="toggleCriterion('{{ group }}', '{{ criterion }}')">
+                                <input type="checkbox" id="criterion-{{ loop.index }}"
+                                    :checked="isCriterionSelected('{{ group }}', '{{ criterion }}')"
+                                    class="h-4 w-4 text-[#17365c] border-gray-300 rounded focus:ring-[#17365c] pointer-events-none">
+                                <span class="ml-3 text-sm font-medium text-gray-700 select-none pointer-events-none">
+                                    {{ criterion }}
+                                </span>
+                            </div>
+                            {% endfor %}
+                        </div>
                     </div>
                     {% endfor %}
                 </div>
             </div>
-            {% endfor %}
         </div>
 
-        <button id="generate-aia-btn"
-            class="w-full rub-blue text-white font-bold py-3 rounded-lg hover:bg-opacity-90 transition duration-200 mt-6 focus:outline-none focus:ring-2 focus:ring-[#17365c] focus:ring-offset-2">
-            AIA generieren
+    </div>
+
+    <!-- Feedback und Submit-Button -->
+    <div class="mt-6 border-t border-gray-100 pt-6">
+        <div v-if="errorMsg"
+            class="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg flex items-center gap-2">
+            <svg class="w-4 h-4 text-red-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>[[ errorMsg ]]</span>
+        </div>
+
+        <button id="generate-aia-btn" @click="submitForm" :disabled="!isValid || isSubmitting"
+            class="w-full text-white font-bold py-3 px-6 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-[#17365c] focus:ring-offset-2 flex items-center justify-center gap-2"
+            :class="isValid && !isSubmitting ? 'rub-blue hover:bg-opacity-90 cursor-pointer shadow-md' : 'bg-gray-300 text-gray-500 cursor-not-allowed'">
+            <svg v-if="isSubmitting" class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg"
+                fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                </path>
+            </svg>
+            <span>AIA generieren</span>
         </button>
     </div>
 </div>
