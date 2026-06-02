@@ -43,8 +43,11 @@ def load_criteria_catalog() -> list[BeautifulSoup] | None:
 
     # Add paths to further catalogs here to expand tool
     catalog_paths = ["2026_06_01_RUB_Merkmale_Nachhaltigkeit.xml"]
-
-    catalogs = [BeautifulSoup(c_path, "xml") for c_path in catalog_paths]
+    
+    catalogs = []
+    for c_path in catalog_paths:
+        with Path(c_path).resolve().open("r") as fp:
+            catalogs.append(BeautifulSoup(fp, "xml"))
     return catalogs
 
 # Erlaubte Dateiendungen für Uploads (hier nur .ids)
