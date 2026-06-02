@@ -60,7 +60,7 @@ def map_criteria_to_features(criteria_list: list[str], catalogs: list[BeautifulS
     return list(unique_properties)
 
 
-def load_criteria_catalog() -> list[BeautifulSoup] | None:
+def load_criteria_catalogs() -> list[BeautifulSoup]:
     u"""Loads XML file containing all criteria and returns list of parsed XML documents."""
 
     # Add paths to further catalogs here to expand tool
@@ -87,14 +87,15 @@ def submit():
         data = request.form
         if not data or "criteria" not in data:
             return {"error": "Invalid request data"}, 400
-        
+
+        #TODO: Adapt to retrieve criteria GUID from form
+
         # Kriterien aus Formular auslesen
         criteria_list = json.loads(data.get("criteria", "[]"))
-        # Mapping aus Datei laden
-        mapping_data = json.load(open("mapping.json"))
 
         # Features aus Mapping ableiten
-        mapped_features = map_criteria_to_features(criteria_list, mapping_data)
+        criteria_catalogs = load_criteria_catalogs()
+        mapped_features = map_criteria_to_features(criteria_list, criteria_catalogs)
 
         # Hochgeladene Datei auslesen
         ids_file = request.files.get('idsFile')
