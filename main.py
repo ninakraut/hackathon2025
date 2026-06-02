@@ -1,4 +1,4 @@
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 from flask import Flask
 from flask import request
 from werkzeug.utils import secure_filename
@@ -28,15 +28,37 @@ def main():
     return render_template("index.html", data=criteria)
 
 # Hilfsfunktion: Kriterien in Merkmale abbilden
-def map_criteria_to_features(criteria_list, mapping):
-    all_features = set()
+def map_criteria_to_features(criteria_list: list[str], catalogs: list[BeautifulSoup]) -> list[Tag]:
+    u"""Loads XML file containing all criteria and properties and returns a unique set of properties based on user selection.
 
-    # load property information and transform into dataclass
-    with open("properties.json") as property_information:
-        property_data = json.load(property_information)
-    properties = [aia.Property(**prop) for prop in property_data]
+    Parameters:
+        `criteria_list`: List of criteria GUIDs to map
+        `catalogs`: Catalog of all criteria and respective property mappings
 
-    return list(unique_features)
+    Returns:
+          `unique_features`: List of unique properties based on user selection`
+    """
+
+    unique_properties = set()
+
+    for c in catalogs:
+        props = c.find_all('property')
+        unique_properties = unique_properties.union(props)
+
+    # Add all unselected properties to set and use difference for removal
+    unselected_properties = set()
+    for p in unique_properties:
+        guid = p.groupOfProperties.get_text()
+        if guid not in criteria_list:
+            unselected_properties.add(p)
+
+    print(f"Selected {len(criteria_list)} criteria")
+    print(f"Mapped selected criteria to {len(unique_properties) - len(unselected_properties)} out of {len(unique_properties)} unique properties")
+
+    unique_properties.difference_update(unselected_properties)
+
+    return list(unique_properties)
+
 
 def load_criteria_catalog() -> list[BeautifulSoup] | None:
     u"""Loads XML file containing all criteria and returns list of parsed XML documents."""
@@ -44,8 +66,12 @@ def load_criteria_catalog() -> list[BeautifulSoup] | None:
     # Add paths to further catalogs here to expand tool
     catalog_paths = ["2026_06_01_RUB_Merkmale_Nachhaltigkeit.xml"]
 
-    catalogs = [BeautifulSoup(c_path, "xml") for c_path in catalog_paths]
+    catalogs = []
+    for c_path in catalog_paths:
+        with Path(c_path).resolve().open("r") as fp:
+            catalogs.append(BeautifulSoup(fp, "xml"))
     return catalogs
+
 
 # Erlaubte Dateiendungen für Uploads (hier nur .ids)
 ALLOWED_EXTENSIONS = {'ids'}

@@ -69,6 +69,8 @@ class AiaEnhancer:
 
     def check_and_add_properties(self, object_: str | BeautifulSoup, properties: List[Property]):
         u"""Check if all needed properties in object and add missing properties."""
+
+        #TODO: Fix input to BeautifulSoup (cannot be path, needs to be fp or XML as string
         object_ = BeautifulSoup(object_, "xml") if isinstance(object_, str) else object_
 
         for property_ in properties:
