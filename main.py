@@ -34,20 +34,16 @@ def map_criteria_to_features(criteria_list, mapping):
         property_data = json.load(property_information)
     properties = [aia.Property(**prop) for prop in property_data]
 
-    for criterion in criteria_list:
-        group = criterion["group"]      # z. B. Kategorie der Kriterien
-        name = criterion["criterion"]   # konkretes Kriterium
-        # Prüfen, ob Mapping für diese Gruppe und Kriterium existiert
-        if group in mapping and name in mapping[group]:
-            feature_names = mapping[group][name]
-            for feature in feature_names:
-                match = next((p for p in properties if p.name == feature), None)
-                all_features.add(match)  # Features hinzufügen
-    
-    # Entfernen von Duplikaten und Sortieren der Merkmale
-    unique_features = list(all_features)
-    
-    return unique_features
+    return list(unique_features)
+
+def load_criteria_catalog() -> list[BeautifulSoup] | None:
+    u"""Loads XML file containing all criteria and returns list of parsed XML documents."""
+
+    # Add paths to further catalogs here to expand tool
+    catalog_paths = ["2026_06_01_RUB_Merkmale_Nachhaltigkeit.xml"]
+
+    catalogs = [BeautifulSoup(c_path, "xml") for c_path in catalog_paths]
+    return catalogs
 
 # Erlaubte Dateiendungen für Uploads (hier nur .ids)
 ALLOWED_EXTENSIONS = {'ids'}
