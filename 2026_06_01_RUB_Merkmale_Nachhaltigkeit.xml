@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Container>
+    <propertyGroup>
+        <guid>d3a1b2c4-e5f6-4a7b-8c9d-0e1f2a3b4c5d</guid>
+        <status>active</status>
+        <dateOfCreation>2026-06-01T12:00:00</dateOfCreation>
+        <dateOfRevision>2026-06-01T12:00:00</dateOfRevision>
+        <dateOfVersion>2026-06-01T12:00:00</dateOfVersion>
+        <versionNumber>1</versionNumber>
+        <revisionNumber>1</revisionNumber>
+        <creatorsLanguage>de-DEIFC-IFC</creatorsLanguage>
+        <namesInLanguage>
+            <name>Rückbaubarkeit &amp; Zirkularität</name>
+            <language>de-DEIFC-IFC</language>
+        </namesInLanguage>
+        <definitionsInLanguage>
+            <definition>Gruppe zur Bewertung der Eignung eines Bauteils für die nicht-destruktive Demontage und Kreislaufführung.</definition>
+            <language>de-DEIFC-IFC</language>
+        </definitionsInLanguage>
+        <categoryOfGroupOfProperties>name property set</categoryOfGroupOfProperties>
+    </propertyGroup>
+
+    <property>
+        <guid>a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6</guid>
+        <status>active</status>
+        <dateOfCreation>2026-06-01T12:00:00</dateOfCreation>
+        <dateOfRevision>2026-06-01T12:00:00</dateOfRevision>
+        <dateOfVersion>2026-06-01T12:00:00</dateOfVersion>
+        <versionNumber>1</versionNumber>
+        <revisionNumber>1</revisionNumber>
+        <creatorsLanguage>de-DEIFC-IFC</creatorsLanguage>
+        <namesInLanguage>
+            <name>Verbindungsart</name>
+            <language>de-DEIFC-IFC</language>
+        </namesInLanguage>
+        <definitionsInLanguage>
+            <definition>Art der mechanischen oder stoffschlüssigen Verbindung des Bauteils zur Bewertung der Reversibilität.</definition>
+            <language>de-DEIFC-IFC</language>
+        </definitionsInLanguage>
+        <descriptionsInLanguage>
+            <description>Geben Sie die vorherrschende Verbindungsart an (z.B. geschraubt, gesteckt, geklebt, monolithisch).</description>
+            <language>de-DEIFC-IFC</language>
+        </descriptionsInLanguage>
+        <groupOfProperties>d3a1b2c4-e5f6-4a7b-8c9d-0e1f2a3b4c5d</groupOfProperties>
+    </property>
+
+    <property>
+        <guid>b2c3d4e5-f6a7-48b9-c0d1-e2f3a4b5c6d7</guid>
+        <status>active</status>
+        <dateOfCreation>2026-06-01T12:00:00</dateOfCreation>
+        <dateOfRevision>2026-06-01T12:00:00</dateOfRevision>
+        <dateOfVersion>2026-06-01T12:00:00</dateOfVersion>
+        <versionNumber>1</versionNumber>
+        <revisionNumber>1</revisionNumber>
+        <creatorsLanguage>de-DEIFC-IFC</creatorsLanguage>
+        <namesInLanguage>
+            <name>Zugänglichkeit</name>
+            <language>de-DEIFC-IFC</language>
+        </namesInLanguage>
+        <definitionsInLanguage>
+            <definition>Bewertung, ob die Verbindung für den Rückbau ohne Beschädigung benachbarter Bauteile zugänglich ist.</definition>
+            <language>de-DEIFC-IFC</language>
+        </definitionsInLanguage>
+        <descriptionsInLanguage>
+            <description>Wählen Sie: frei zugänglich, bedingt zugänglich, nicht zugänglich.</description>
+            <language>de-DEIFC-IFC</language>
+        </descriptionsInLanguage>
+        <groupOfProperties>d3a1b2c4-e5f6-4a7b-8c9d-0e1f2a3b4c5d</groupOfProperties>
+    </property>
+
+    <propertyGroup>
+        <guid>f4b2c3d5-a6e7-4b8c-9d0e-1f2a3b4c5d6e</guid>
+        <status>active</status>
+        <dateOfCreation>2026-06-01T12:00:00</dateOfCreation>
+        <dateOfRevision>2026-06-01T12:00:00</dateOfRevision>
+        <dateOfVersion>2026-06-01T12:00:00</dateOfVersion>
+        <versionNumber>1</versionNumber>
+        <revisionNumber>1</revisionNumber>
+        <creatorsLanguage>de-DEIFC-IFC</creatorsLanguage>
+        <namesInLanguage>
+            <name>Sortenreinheit &amp; Schadstofffreiheit</name>
+            <language>de-DEIFC-IFC</language>
+        </namesInLanguage>
+        <definitionsInLanguage>
+            <definition>Gruppe zur Bewertung der stofflichen Trennbarkeit und Freiheit von Gefahrenstoffen.</definition>
+            <language>de-DEIFC-IFC</language>
+        </definitionsInLanguage>
+        <categoryOfGroupOfProperties>name property set</categoryOfGroupOfProperties>
+    </propertyGroup>
+
+    <property>
+        <guid>c3d4e5f6-a7b8-49c0-d1e2-f3a4b5c6d7e8</guid>
+        <status>active</status>
+        <dateOfCreation>2026-06-01T12:00:00</dateOfCreation>
+        <dateOfRevision>2026-06-01T12:00:00</dateOfRevision>
+        <dateOfVersion>2026-06-01T12:00:00</dateOfVersion>
+        <versionNumber>1</versionNumber>
+        <revisionNumber>1</revisionNumber>
+        <creatorsLanguage>de-DEIFC-IFC</creatorsLanguage>
+        <namesInLanguage>
+            <name>Trennbarkeit</name>
+            <language>de-DEIFC-IFC</language>
+        </namesInLanguage>
+        <definitionsInLanguage>
+            <definition>Grad der stofflichen Trennbarkeit des Bauteils.</definition>
+            <language>de-DEIFC-IFC</language>
+        </definitionsInLanguage>
+        <descriptionsInLanguage>
+            <description>Klassifizierung: Monolithisch (nicht trennbar), Hybrid (schwer trennbar), Sortenrein (einfach trennbar).</description>
+            <language>de-DEIFC-IFC</language>
+        </descriptionsInLanguage>
+        <groupOfProperties>f4b2c3d5-a6e7-4b8c-9d0e-1f2a3b4c5d6e</groupOfProperties>
+    </property>
+
+    <property>
+        <guid>d4e5f6a7-b8c9-4a0d-e1f2-a3b4c5d6e7f8</guid>
+        <status>active</status>
+        <dateOfCreation>2026-06-01T12:00:00</dateOfCreation>
+        <dateOfRevision>2026-06-01T12:00:00</dateOfRevision>
+        <dateOfVersion>2026-06-01T12:00:00</dateOfVersion>
+        <versionNumber>1</versionNumber>
+        <revisionNumber>1</revisionNumber>
+        <creatorsLanguage>de-DEIFC-IFC</creatorsLanguage>
+        <namesInLanguage>
+            <name>Schadstoffreinheit</name>
+            <language>de-DEIFC-IFC</language>
+        </namesInLanguage>
+        <definitionsInLanguage>
+            <definition>Klassifizierung des Bauteils hinsichtlich der Freiheit von Gefahrenstoffen.</definition>
+            <language>de-DEIFC-IFC</language>
+        </definitionsInLanguage>
+        <descriptionsInLanguage>
+            <description>Geben Sie an, ob Gefahrenstoffe enthalten sind (z.B. Asbest, PAK). Wert: Frei / Belastet.</description>
+            <language>de-DEIFC-IFC</language>
+        </descriptionsInLanguage>
+        <groupOfProperties>f4b2c3d5-a6e7-4b8c-9d0e-1f2a3b4c5d6e</groupOfProperties>
+    </property>
+
+    <propertyGroup>
+        <guid>a7b8c9d0-e1f2-4c7d-8e9f-0a1b2c3d4e5f</guid>
+        <status>active</status>
+        <dateOfCreation>2026-06-01T12:00:00</dateOfCreation>
+        <dateOfRevision>2026-06-01T12:00:00</dateOfRevision>
+        <dateOfVersion>2026-06-01T12:00:00</dateOfVersion>
+        <versionNumber>1</versionNumber>
+        <revisionNumber>1</revisionNumber>
+        <creatorsLanguage>de-DEIFC-IFC</creatorsLanguage>
+        <namesInLanguage>
+            <name>Verwertung</name>
+            <language>de-DEIFC-IFC</language>
+        </namesInLanguage>
+        <definitionsInLanguage>
+            <definition>Potenzial zur stofflichen oder energetischen Wiederverwertung nach Lebensende.</definition>
+            <language>de-DEIFC-IFC</language>
+        </definitionsInLanguage>
+        <categoryOfGroupOfProperties>name property set</categoryOfGroupOfProperties>
+    </propertyGroup>
+
+    <property>
+        <guid>e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8a9b</guid>
+        <status>active</status>
+        <dateOfCreation>2026-06-01T12:00:00</dateOfCreation>
+        <dateOfRevision>2026-06-01T12:00:00</dateOfRevision>
+        <dateOfVersion>2026-06-01T12:00:00</dateOfVersion>
+        <versionNumber>1</versionNumber>
+        <revisionNumber>1</revisionNumber>
+        <creatorsLanguage>de-DEIFC-IFC</creatorsLanguage>
+        <namesInLanguage>
+            <name>Recyclingpotenzial</name>
+            <language>de-DEIFC-IFC</language>
+        </namesInLanguage>
+        <definitionsInLanguage>
+            <definition>Einstufung des Recyclingpotenzials basierend auf Materialeigenschaften.</definition>
+            <language>de-DEIFC-IFC</language>
+        </definitionsInLanguage>
+        <descriptionsInLanguage>
+            <description>Index (0-5) zur Bewertung der stofflichen Wiederverwertbarkeit.</description>
+            <language>de-DEIFC-IFC</language>
+        </descriptionsInLanguage>
+        <groupOfProperties>a7b8c9d0-e1f2-4c7d-8e9f-0a1b2c3d4e5f</groupOfProperties>
+    </property>
+
+</Container>
