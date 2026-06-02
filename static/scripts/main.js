@@ -1,77 +1,107 @@
-// Referenzen auf die Eingabeelemente im DOM
-const generateBtn = document.getElementById('generate-aia-btn');        // Button zum Generieren
-const tenderNameInput = document.getElementById('tender-name');         // Eingabefeld für Projektnamen
-const tenderDescriptionTextarea = document.getElementById('tender-description'); // Eingabefeld für Beschreibung
-const criteriaCheckboxes = document.querySelectorAll('#criteria-checklist .criterion'); // Alle Kriterien-Checkboxen
-const idsUploadInput = document.getElementById('ids-upload');           // Datei-Upload-Feld (.ids)
-const idsGUIDInput = document.getElementById('ids-guid');               // Eingabefeld für GUID (Alternative zum Upload)
+const { createApp } = Vue;
 
-const API_ENDPOINT = '/submit'; // API-Endpunkt in Flask
-
-// Klick-Event für den "Generate"-Button
-generateBtn.addEventListener('click', async (event) => {
-    // Verhindert das Standardverhalten des Buttons (kein Seitenreload)
-    event.preventDefault();
-
-    // Eingaben aus Formularfeldern auslesen
-    const tenderName = tenderNameInput.value;
-    const tenderDescription = tenderDescriptionTextarea.value;
-    const idsFile = idsUploadInput.files[0]; // Erste ausgewählte Datei (falls vorhanden)
-    const idsGUID = idsGUIDInput.value;      // GUID-Wert (falls vorhanden)
-
-    // Ausgewählte Kriterien-Checkboxen ermitteln
-    const selectedCriteria = Array.from(criteriaCheckboxes)
-        .filter(criterion => {
-            let checkbox = criterion.querySelector("input[type=checkbox]");
-            return checkbox.checked; // Nur die ausgewählten Checkboxen berücksichtigen
-        })
-        .map(criterion => {
-            // Zu jeder Checkbox gehört auch ein Textfeld (z. B. Wert/Eingabe)
-            let checkbox = criterion.querySelector("input[type=checkbox]");
-            let value = criterion.querySelector("input[type=text]").value;
-
-            // Datenstruktur für Backend: Gruppe, Kriterium, Wert
-            return {
-                group: criterion.dataset.group,
-                criterion: criterion.dataset.criterion,
-                value: value
-            };
-        });
-
-    // FormData-Objekt vorbereiten (wird für Dateien benötigt)
-    const formData = new FormData();
-    formData.append('tenderName', tenderName);
-    formData.append('tenderDescription', tenderDescription);
-    formData.append('criteria', JSON.stringify(selectedCriteria)); // Array als JSON übertragen
-    formData.append('idsGUID', idsGUID);
-
-    // Falls Datei hochgeladen → hinzufügen
-    if (idsFile) {
-        formData.append('idsFile', idsFile);
-    }
-
-    // Debug-Ausgabe: Zeigt Payload im Browser-Log
-    console.log('Payload, der gesendet wird:', formData);
-
-    // API-Anfrage an Flask-Backend
-    try {
-        const response = await fetch(API_ENDPOINT, {
-            method: 'POST',
-            body: formData, // FormData enthält Felder + Datei
-        });
-
-        // Wenn Anfrage erfolgreich war
-        if(response.ok) {
-            const result = await response.json();
-            console.log('Erfolgreiche Antwort:', result);
-
-            // Weiterleitung nach erfolgreichem Submit
-            window.location = "/submit";
-        } else {
-            console.error('Fehler bei der API-Anfrage:', response.statusText);
+createApp({
+    delimiters: ['[[', ']]'],
+    data() {
+        return {
+            activeTab: 'upload', // 'upload' or 'guid'
+            isDragging: false,
+            idsFile: null,
+            idsGUID: '',
+            buildingType: 'verwaltungsgebaeude',
+            selectedCriteria: [], // Array of { group, criterion, value }
+            isSubmitting: false,
+            errorMsg: ''
+        };
+    },
+    computed: {
+        isValid() {
+            if (this.activeTab === 'upload') {
+                return this.idsFile !== null;
+            } else {
+                return this.idsGUID.trim().length > 0;
+            }
         }
-    } catch (error) {
-        // Falls Request komplett fehlschlägt (z. B. Netzwerkfehler)
-        console.error('API-Anruf fehlgeschlagen:', error);
+    },
+    methods: {
+        isCriterionSelected(group, criterion) {
+            return this.selectedCriteria.some(c => c.group === group && c.criterion === criterion);
+        },
+        toggleCriterion(group, criterion) {
+            const idx = this.selectedCriteria.findIndex(c => c.group === group && c.criterion === criterion);
+            if (idx === -1) {
+                // value is sent as empty string since individual text inputs are deprecated
+                this.selectedCriteria.push({ group, criterion, value: '' });
+            } else {
+                this.selectedCriteria.splice(idx, 1);
+            }
+        },
+        handleFileSelection(event) {
+            const files = event.target.files;
+            if (files && files.length > 0) {
+                this.setFile(files[0]);
+            }
+        },
+        handleFileDrop(event) {
+            this.isDragging = false;
+            const files = event.dataTransfer.files;
+            if (files && files.length > 0) {
+                this.setFile(files[0]);
+            }
+        },
+        setFile(file) {
+            if (file.name.toLowerCase().endsWith('.ids')) {
+                this.idsFile = file;
+                this.errorMsg = '';
+            } else {
+                this.errorMsg = 'Nur Dateien mit der Endung .ids sind erlaubt.';
+                this.idsFile = null;
+                if (this.$refs.fileInput) {
+                    this.$refs.fileInput.value = '';
+                }
+            }
+        },
+        clearFile() {
+            this.idsFile = null;
+            if (this.$refs.fileInput) {
+                this.$refs.fileInput.value = '';
+            }
+        },
+        async submitForm() {
+            if (!this.isValid) return;
+
+            this.isSubmitting = true;
+            this.errorMsg = '';
+
+            const formData = new FormData();
+            formData.append('criteria', JSON.stringify(this.selectedCriteria));
+            formData.append('buildingType', this.buildingType);
+
+            if (this.activeTab === 'upload' && this.idsFile) {
+                formData.append('idsFile', this.idsFile);
+                formData.append('idsGUID', '');
+            } else {
+                formData.append('idsGUID', this.idsGUID.trim());
+            }
+
+            try {
+                const response = await fetch('/submit', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    window.location = '/submit';
+                } else {
+                    const resData = await response.json().catch(() => ({}));
+                    this.errorMsg = resData.error || `Fehler bei der Verarbeitung (${response.statusText})`;
+                }
+            } catch (error) {
+                console.error('API-Anruf fehlgeschlagen:', error);
+                this.errorMsg = 'Netzwerkfehler beim Senden der Daten.';
+            } finally {
+                this.isSubmitting = false;
+            }
+        }
     }
-});
+}).mount('#app');
