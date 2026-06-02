@@ -1,7 +1,9 @@
+from bs4 import BeautifulSoup
 from flask import Flask
 from flask import request
 from werkzeug.utils import secure_filename
 from flask.templating import render_template
+from pathlib import Path
 import json
 import os
 import requests
