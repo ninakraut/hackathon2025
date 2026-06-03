@@ -137,25 +137,25 @@
                 <h3 class="text-sm font-semibold uppercase tracking-wider text-gray-500 mb-4">Ausschreibungskriterien
                 </h3>
                 <div id="criteria-checklist" class="space-y-4 overflow-y-auto max-h-[300px] pr-1">
-                    {% for group, criteria in data.items() %}
-                    <div>
-                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">{{ group }}</h4>
-                        <div class="space-y-2">
-                            {% for criterion in criteria %}
-                            <div class="criterion flex items-center p-3 rounded-lg border transition duration-150 cursor-pointer shadow-sm"
-                                :class="isCriterionSelected('{{ group }}', '{{ criterion }}') ? 'border-[#17365c] bg-blue-50/15' : 'border-gray-200 hover:border-gray-300 bg-white'"
-                                @click="toggleCriterion('{{ group }}', '{{ criterion }}')">
-                                <input type="checkbox" id="criterion-{{ loop.index }}"
-                                    :checked="isCriterionSelected('{{ group }}', '{{ criterion }}')"
-                                    class="h-4 w-4 text-[#17365c] border-gray-300 rounded focus:ring-[#17365c] pointer-events-none">
-                                <span class="ml-3 text-sm font-medium text-gray-700 select-none pointer-events-none">
-                                    {{ criterion }}
+                    <div class="space-y-2">
+                        {% for group in data %}
+                        <div class="criterion flex items-start p-3 rounded-lg border transition duration-150 cursor-pointer shadow-sm"
+                            :class="isCriterionSelected('{{ group.name }}') ? 'border-[#17365c] bg-blue-50/15' : 'border-gray-200 hover:border-gray-300 bg-white'"
+                            @click="toggleCriterion('{{ group.name }}')">
+                            <input type="checkbox" id="criterion-{{ loop.index }}"
+                                :checked="isCriterionSelected('{{ group.name }}')"
+                                class="h-4 w-4 text-[#17365c] border-gray-300 rounded focus:ring-[#17365c] mt-0.5 pointer-events-none">
+                            <div class="ml-3 select-none pointer-events-none">
+                                <span class="block text-sm font-semibold text-gray-800">
+                                    {{ group.name }}
+                                </span>
+                                <span class="block text-xs text-gray-500 mt-0.5">
+                                    Beinhaltet: {{ group.properties | join(', ') }}
                                 </span>
                             </div>
-                            {% endfor %}
                         </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 </div>
             </div>
         </div>

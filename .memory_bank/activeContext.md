@@ -10,8 +10,7 @@ Providing a clean, responsive single-page horizontal dashboard. The user manages
 - **Delimiters Match**: Set Vue custom delimiters to `[[` and `]]` to coexist alongside Jinja template parsing tags.
 - **Removed Deprecated Inputs**: Dropped tender details ("Name" / "Beschreibung") and the text-value input fields from criteria checkboxes, as requested by the user.
 - **Widescreen Two-Column Layout**: Left column houses the source/context and right column hosts the criteria list.
-- **Clickable Card Selector Target**: Set `pointer-events-none` on standard checkboxes and text elements to allow smooth, single-click toggle events on the entire card wrapper without bubble double-toggling.
+- **XML Criteria Catalog Integration**: Replaced the deprecated `criteria.json` with the XML criteria catalog (`2026_06_01_RUB_Merkmale_Nachhaltigkeit.xml`). `main.py` now parses the XML dynamically using BeautifulSoup to construct criteria groups and criteria lists, and `mapping.json` is updated to support the new criteria mappings.
 
 ## Next Steps
-- Verify the mapping process in backend `main.py` functions correctly with the payload sent from the front-end.
 - Validate error behaviors for non-standard files or offline GUID API requests.

@@ -24,14 +24,13 @@ createApp({
         }
     },
     methods: {
-        isCriterionSelected(group, criterion) {
-            return this.selectedCriteria.some(c => c.group === group && c.criterion === criterion);
+        isCriterionSelected(criterion) {
+            return this.selectedCriteria.some(c => c.criterion === criterion);
         },
-        toggleCriterion(group, criterion) {
-            const idx = this.selectedCriteria.findIndex(c => c.group === group && c.criterion === criterion);
+        toggleCriterion(criterion) {
+            const idx = this.selectedCriteria.findIndex(c => c.criterion === criterion);
             if (idx === -1) {
-                // value is sent as empty string since individual text inputs are deprecated
-                this.selectedCriteria.push({ group, criterion, value: '' });
+                this.selectedCriteria.push({ group: '', criterion, value: '' });
             } else {
                 this.selectedCriteria.splice(idx, 1);
             }

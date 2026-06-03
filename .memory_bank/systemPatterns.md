@@ -7,7 +7,7 @@ This section explains the architectural and design decisions implemented in this
 ```mermaid
 graph TD
     UI[index.html / Vue 3 CDN] -->|POST FormData /submit| App[Flask Server main.py]
-    App -->|Reads| Crit[criteria.json]
+    App -->|Reads| Crit[2026_06_01_RUB_Merkmale_Nachhaltigkeit.xml]
     App -->|Reads| Map[mapping.json]
     App -->|Resolves| Props[properties.json]
     App -->|Invokes| Aia[aia.py: AiaEnhancer]

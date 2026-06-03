@@ -21,8 +21,37 @@ if(not os.path.exists(app.config["UPLOAD_FOLDER"])):
 # Route für die Startseite
 @app.route("/")
 def main():
-    # Kriterien aus JSON-Datei laden
-    criteria = json.load(open("criteria.json", encoding="utf8"))
+    # Kriterien aus XML-Datei laden
+    catalogs = load_criteria_catalog()
+    criteria = []
+    if catalogs:
+        for soup in catalogs:
+            # Map of propertyGroup guid to propertyGroup info
+            groups = {}
+            for group in soup.find_all("propertyGroup"):
+                guid_el = group.find("guid")
+                names_el = group.find("namesInLanguage")
+                if guid_el and names_el:
+                    name_el = names_el.find("name")
+                    if name_el:
+                        groups[guid_el.text.strip()] = {
+                            "name": name_el.text.strip(),
+                            "properties": []
+                        }
+            
+            # Map of properties to groups
+            for prop in soup.find_all("property"):
+                names_el = prop.find("namesInLanguage")
+                group_guid_el = prop.find("groupOfProperties")
+                if names_el and group_guid_el:
+                    name_el = names_el.find("name")
+                    if name_el:
+                        prop_name = name_el.text.strip()
+                        group_guid = group_guid_el.text.strip()
+                        if group_guid in groups:
+                            groups[group_guid]["properties"].append(prop_name)
+            
+            criteria.extend(groups.values())
 
     # Übergabe der Kriterien an das Template "index.html"
     return render_template("index.html", data=criteria)
@@ -34,9 +63,20 @@ def map_criteria_to_features(criteria_list, mapping):
     # load property information and transform into dataclass
     with open("properties.json") as property_information:
         property_data = json.load(property_information)
-    properties = [aia.Property(**prop) for prop in property_data]
+    properties = {prop["name"]: aia.Property(**prop) for prop in property_data}
 
-    return list(unique_features)
+    for item in criteria_list:
+        criterion = item.get("criterion")
+        # Find mapped features for the criterion (which is the property group name)
+        feature_names = []
+        if criterion in mapping:
+            feature_names = mapping[criterion]
+            
+        for name in feature_names:
+            if name in properties:
+                all_features.add(properties[name])
+
+    return list(all_features)
 
 def load_criteria_catalog() -> list[BeautifulSoup] | None:
     u"""Loads XML file containing all criteria and returns list of parsed XML documents."""
