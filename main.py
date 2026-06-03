@@ -1,4 +1,4 @@
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 from flask import Flask
 from flask import request
 from werkzeug.utils import secure_filename
@@ -38,7 +38,7 @@ def main():
                             "name": name_el.text.strip(),
                             "properties": []
                         }
-            
+
             # Map of properties to groups
             for prop in soup.find_all("property"):
                 names_el = prop.find("namesInLanguage")
@@ -50,45 +50,57 @@ def main():
                         group_guid = group_guid_el.text.strip()
                         if group_guid in groups:
                             groups[group_guid]["properties"].append(prop_name)
-            
+
             criteria.extend(groups.values())
 
     # Übergabe der Kriterien an das Template "index.html"
     return render_template("index.html", data=criteria)
 
 # Hilfsfunktion: Kriterien in Merkmale abbilden
-def map_criteria_to_features(criteria_list, mapping):
-    all_features = set()
+def map_criteria_to_features(criteria_list: list[str], catalogs: list[BeautifulSoup]) -> list[Tag]:
+    u"""Loads XML file containing all criteria and properties and returns a unique set of properties based on user selection.
 
-    # load property information and transform into dataclass
-    with open("properties.json") as property_information:
-        property_data = json.load(property_information)
-    properties = {prop["name"]: aia.Property(**prop) for prop in property_data}
+    Parameters:
+        `criteria_list`: List of criteria GUIDs to map
+        `catalogs`: Catalog of all criteria and respective property mappings
 
-    for item in criteria_list:
-        criterion = item.get("criterion")
-        # Find mapped features for the criterion (which is the property group name)
-        feature_names = []
-        if criterion in mapping:
-            feature_names = mapping[criterion]
-            
-        for name in feature_names:
-            if name in properties:
-                all_features.add(properties[name])
+    Returns:
+          `unique_features`: List of unique properties based on user selection`
+    """
 
-    return list(all_features)
+    unique_properties = set()
 
-def load_criteria_catalog() -> list[BeautifulSoup] | None:
+    for c in catalogs:
+        props = c.find_all('property')
+        unique_properties = unique_properties.union(props)
+
+    # Add all unselected properties to set and use difference for removal
+    unselected_properties = set()
+    for p in unique_properties:
+        guid = p.groupOfProperties.get_text()
+        if guid not in criteria_list:
+            unselected_properties.add(p)
+
+    print(f"Selected {len(criteria_list)} criteria")
+    print(f"Mapped selected criteria to {len(unique_properties) - len(unselected_properties)} out of {len(unique_properties)} unique properties")
+
+    unique_properties.difference_update(unselected_properties)
+
+    return list(unique_properties)
+
+
+def load_criteria_catalogs() -> list[BeautifulSoup]:
     u"""Loads XML file containing all criteria and returns list of parsed XML documents."""
 
     # Add paths to further catalogs here to expand tool
     catalog_paths = ["2026_06_01_RUB_Merkmale_Nachhaltigkeit.xml"]
-    
+
     catalogs = []
     for c_path in catalog_paths:
         with Path(c_path).resolve().open("r") as fp:
             catalogs.append(BeautifulSoup(fp, "xml"))
     return catalogs
+
 
 # Erlaubte Dateiendungen für Uploads (hier nur .ids)
 ALLOWED_EXTENSIONS = {'ids'}
@@ -104,14 +116,15 @@ def submit():
         data = request.form
         if not data or "criteria" not in data:
             return {"error": "Invalid request data"}, 400
-        
+
+        #TODO: Adapt to retrieve criteria GUID from form
+
         # Kriterien aus Formular auslesen
         criteria_list = json.loads(data.get("criteria", "[]"))
-        # Mapping aus Datei laden
-        mapping_data = json.load(open("mapping.json"))
 
         # Features aus Mapping ableiten
-        mapped_features = map_criteria_to_features(criteria_list, mapping_data)
+        criteria_catalogs = load_criteria_catalogs()
+        mapped_features = map_criteria_to_features(criteria_list, criteria_catalogs)
 
         # Hochgeladene Datei auslesen
         ids_file = request.files.get('idsFile')
