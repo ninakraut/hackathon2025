@@ -21,8 +21,38 @@ if(not os.path.exists(app.config["UPLOAD_FOLDER"])):
 # Route für die Startseite
 @app.route("/")
 def main():
-    # Kriterien aus JSON-Datei laden
-    criteria = json.load(open("criteria.json", encoding="utf8"))
+    # Kriterien aus XML-Datei laden
+    catalogs = load_criteria_catalogs()
+    criteria = []
+    if catalogs:
+        for soup in catalogs:
+            # Map of propertyGroup guid to propertyGroup info
+            groups = {}
+            for group in soup.find_all("propertyGroup"):
+                guid_el = group.find("guid")
+                names_el = group.find("namesInLanguage")
+                if guid_el and names_el:
+                    name_el = names_el.find("name")
+                    if name_el:
+                        groups[guid_el.text.strip()] = {
+                            "name": name_el.text.strip(),
+                            "guid": guid_el.text.strip(),
+                            "properties": []
+                        }
+
+            # Map of properties to groups
+            for prop in soup.find_all("property"):
+                names_el = prop.find("namesInLanguage")
+                group_guid_el = prop.find("groupOfProperties")
+                if names_el and group_guid_el:
+                    name_el = names_el.find("name")
+                    if name_el:
+                        prop_name = name_el.text.strip()
+                        group_guid = group_guid_el.text.strip()
+                        if group_guid in groups:
+                            groups[group_guid]["properties"].append(prop_name)
+
+            criteria.extend(groups.values())
 
     # Übergabe der Kriterien an das Template "index.html"
     return render_template("index.html", data=criteria)
@@ -84,14 +114,16 @@ def submit():
         return render_template("result.html")
     else:
         # Bei POST: Formular-Daten verarbeiten
-        data = request.form
+        data = request.form   # Bsp: ImmutableMultiDict([('criteria', '["d3a1b2c4-e5f6-4a7b-8c9d-0e1f2a3b4c5d","f4b2c3d5-a6e7-4b8c-9d0e-1f2a3b4c5d6e"]'), ('buildingType', 'verwaltungsgebaeude')])
         if not data or "criteria" not in data:
             return {"error": "Invalid request data"}, 400
 
-        #TODO: Adapt to retrieve criteria GUID from form
-
-        # Kriterien aus Formular auslesen
+        # Kriterien GUIDs aus Formular auslesen
         criteria_list = json.loads(data.get("criteria", "[]"))
+        # Building Type aus Formular auslesen
+        building_type = data.get("buildingType", "")
+        print("Criteria GUIDs: ", ", ".join(criteria_list))
+        print("Building Type: ", building_type)
 
         # Features aus Mapping ableiten
         criteria_catalogs = load_criteria_catalogs()
