@@ -9,7 +9,7 @@ createApp({
             idsFile: null,
             idsGUID: '',
             buildingType: 'verwaltungsgebaeude',
-            selectedCriteria: [], // Array of { group, criterion, value }
+            selectedCriteria: [], // Array of criterion guids
             isSubmitting: false,
             errorMsg: ''
         };
@@ -25,12 +25,12 @@ createApp({
     },
     methods: {
         isCriterionSelected(criterion) {
-            return this.selectedCriteria.some(c => c.criterion === criterion);
+            return this.selectedCriteria.includes(criterion);
         },
         toggleCriterion(criterion) {
-            const idx = this.selectedCriteria.findIndex(c => c.criterion === criterion);
+            const idx = this.selectedCriteria.indexOf(criterion);
             if (idx === -1) {
-                this.selectedCriteria.push({ group: '', criterion, value: '' });
+                this.selectedCriteria.push(criterion);
             } else {
                 this.selectedCriteria.splice(idx, 1);
             }
@@ -78,7 +78,6 @@ createApp({
 
             if (this.activeTab === 'upload' && this.idsFile) {
                 formData.append('idsFile', this.idsFile);
-                formData.append('idsGUID', '');
             } else {
                 formData.append('idsGUID', this.idsGUID.trim());
             }
@@ -88,6 +87,8 @@ createApp({
                     method: 'POST',
                     body: formData,
                 });
+
+                console.log("Form data: ", formData);
 
                 if (response.ok) {
                     window.location = '/submit';

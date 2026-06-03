@@ -36,6 +36,7 @@ def main():
                     if name_el:
                         groups[guid_el.text.strip()] = {
                             "name": name_el.text.strip(),
+                            "guid": guid_el.text.strip(),
                             "properties": []
                         }
 
@@ -113,14 +114,16 @@ def submit():
         return render_template("result.html")
     else:
         # Bei POST: Formular-Daten verarbeiten
-        data = request.form
+        data = request.form   # Bsp: ImmutableMultiDict([('criteria', '["d3a1b2c4-e5f6-4a7b-8c9d-0e1f2a3b4c5d","f4b2c3d5-a6e7-4b8c-9d0e-1f2a3b4c5d6e"]'), ('buildingType', 'verwaltungsgebaeude')])
         if not data or "criteria" not in data:
             return {"error": "Invalid request data"}, 400
 
-        #TODO: Adapt to retrieve criteria GUID from form
-
-        # Kriterien aus Formular auslesen
+        # Kriterien GUIDs aus Formular auslesen
         criteria_list = json.loads(data.get("criteria", "[]"))
+        # Building Type aus Formular auslesen
+        building_type = data.get("buildingType", "")
+        print("Criteria GUIDs: ", ", ".join(criteria_list))
+        print("Building Type: ", building_type)
 
         # Features aus Mapping ableiten
         criteria_catalogs = load_criteria_catalogs()
