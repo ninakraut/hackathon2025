@@ -22,7 +22,7 @@ if(not os.path.exists(app.config["UPLOAD_FOLDER"])):
 @app.route("/")
 def main():
     # Kriterien aus XML-Datei laden
-    catalogs = load_criteria_catalog()
+    catalogs = load_criteria_catalogs()
     criteria = []
     if catalogs:
         for soup in catalogs:
