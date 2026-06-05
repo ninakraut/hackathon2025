@@ -83,6 +83,12 @@ class AiaEnhancer:
         return str(object_)
 
 
+def create_bim_portal_uri_from_guid(guid: str) -> str:
+    u"""Create a dummy BIM portal URI from property GUID."""
+
+    return f"https://via.bund.de/bim/merkmale/details/property/{guid}?type=PROPERTY"
+
+
 if __name__ == "__main__":
     with open("/Users/felix/Arbeit/hackathon/ids-template-dummy.ids", "r") as f:
         object_ = BeautifulSoup(f.read(), "xml")
