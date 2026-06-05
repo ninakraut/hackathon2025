@@ -172,6 +172,7 @@ def submit():
         # Read original ids
         with open(filepath, "r") as fp:
             ids_file = fp.read()
+        ids_file = BeautifulSoup(ids_file, "xml")
         modified_ids = enhancer.check_and_add_properties(ids_file, mapped_features)
         # Ergebnis zurückgeben (Liste der gemappten Features)
         with open(f"static/new.ids", "w") as fp:
